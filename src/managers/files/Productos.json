@@ -81,12 +81,23 @@
 		"id": 9
 	},
 	{
-		"title": "producto prueba",
-		"description": "Este es un producto prueba",
-		"price": 5000,
-		"thumbnail": "./img/img.jpg",
-		"code": "aaaa10",
+		"title": "titulo",
+		"description": "descripcion",
+		"code": "asd",
+		"price": 1000,
+		"status": "true",
 		"stock": 10,
-		"id": 10
+		"category": "categoria",
+		"id": 11
+	},
+	{
+		"title": "titulo",
+		"description": "descripcion",
+		"code": "asd",
+		"price": 1000,
+		"status": "true",
+		"stock": 10,
+		"category": "categoria",
+		"id": 12
 	}
 ]

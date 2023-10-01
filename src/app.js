@@ -1,7 +1,7 @@
 import express from "express";
-
 import productsRouter from "./Routes/products.routes.js"
-/* import cartsRouter from "./Routes/carts.routes.js" */
+import cartsRouter from "./Routes/carts.routes.js"
+
 
 
 
@@ -11,7 +11,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}));
 
 app.use("/api/products", productsRouter);
-/* app.use("/api/carts", cartsRouter); */
+app.use("/api/carts", cartsRouter);
 
 
 
