@@ -9,77 +9,80 @@ const router = Router()
 
 router.get("/", async (req, res) => {
     const queryParams = Number(req.query.limit);
-    const products = await productManager.getProducts();
-    if(!queryParams||queryParams > products.length||queryParams<= 0) return res.send(products);
-    const filteredLimit = products.filter(p=>p.id<=queryParams)
-    res.send(filteredLimit)
+    try {
+        const products = await productManager.getProducts();
+        if(!queryParams||queryParams > products.length||queryParams<= 0) return res.send(products);
+        const filteredLimit = products.filter(p=>p.id<=queryParams)
+        res.send(filteredLimit)
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+    }
+    
 })
 
 router.get("/:pid", async (req, res)=>{
-    const products = await productManager.getProducts();
     const pid = Number(req.params.pid);
-    const pfilter = products.find(p=>p.id === pid);
-    if(!pfilter) return res.send({ error: 'Producto no encontrado' });
-    res.send(pfilter);
+    try {
+        const result = await productManager.getProductsById(pid);
+        if(result.status === "error") return res.status(404).send(result);
+        res.send(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+    }
+    
 })
 
 router.post("/", async (req, res) =>{
-    const products = await productManager.getProducts();
     const product = req.body;
-    if (!product.title ||!product.description ||!product.code ||!product.price
-    ||!product.stock ||!product.category){
-    return res.status(400).send({ status: "error", error: "valores incompletos"})}
-    if (!product.status) {
-        product.status = true;
+    try {
+        const result = await productManager.addProduct(product);
+        if (result.status === "error"){
+            return res.status(400).send(result)
+        }else if(result.status === "success"){
+            return res.send({status: "success", message: "producto creaado"})
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
     }
-    if (products.some(p => p.code === product.code)){
-        return res.status(400).send({ status: "error", error: "ya existe un producto con ese codigo"})
-    }
-    if(products.length === 0){
-        product.id = 1;
-    }else{
-        product.id = products[products.length -1].id + 1;
-    }
-    products.push(product)
-    await fs.promises.writeFile(`${__dirname}/managers/files/Productos.json`, JSON.stringify(products, null, '\t'));
-    res.send({status: "success", message: "producto createado"})
+    
 })
 
 router.put("/:pid", async (req, res)=>{
-    const products = await productManager.getProducts();
     const product = req.body;
     const pid = Number(req.params.pid)
-    if (!product.title ||!product.description ||!product.code ||!product.price
-        ||!product.stock ||!product.category){
-        return res.status(400).send({ status: "error", error: "valores incompletos"})}
-    if (product.id){
-        return res.status(400).send({ status: "error", error: "no se puede modificar el ID"})
-    }     
-    if (!product.status) {
-        product.status = true;
-    }
-    const index = products.findIndex(p => p.id === pid)
-    if (index !== -1){
-        const productComplete = {id: pid,...product}
-        products[index] = productComplete
-        await fs.promises.writeFile(`${__dirname}/managers/files/Productos.json`, JSON.stringify(products, null, '\t'));
-        res.send({status: "success", message: "producto actualizado"})
-    }else{
-        res.status(404).send({status: "error", message: "no se encontro el producto"})
+    try {
+        const result = await productManager.updateProduct(product,pid);
+        if (result.status === "success"){
+            res.send(result)
+        }else if (result.status === "error" && (result.error === "valores incompletos" || result.error === "no se puede modificar el ID" ||result.error === "ya existe un producto con ese codigo" )){
+            return res.status(400).send(result)
+        }else{
+            return res.status(404).send(result)
+        }     
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
     }
 })
 
+
 router.delete("/:pid", async (req, res) =>{
-    const products = await productManager.getProducts();
     const pid = Number(req.params.pid)
-    const index = products.findIndex(p => p.id === pid)
-    if (index !== -1){
-        products.splice(index,1)
-        await fs.promises.writeFile(`${__dirname}/managers/files/Productos.json`, JSON.stringify(products, null, '\t'));
-        res.send({status: "success", message: "producto eliminado"})
-    }else{
-        res.status(404).send({status: "error", message: "no se encontro el producto"})
+    try {
+        const result = await productManager.deleteProduct(pid);
+        if (result.status === "error"){
+           return res.status(404).send(result)
+        }if (result.status === "success"){
+           return res.send(result)
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
     }
+    
 })
 
 export default router;

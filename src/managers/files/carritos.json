@@ -3,17 +3,34 @@
 		"products": [
 			{
 				"id": 1,
-				"quantity": 5
+				"quantity": 7
 			},
 			{
 				"id": 2,
-				"quantity": 3
+				"quantity": 4
+			},
+			{
+				"id": 4,
+				"quantity": 2
 			}
 		],
 		"id": 1
 	},
 	{
-		"products": [],
+		"products": [
+			{
+				"id": 2,
+				"quantity": 2
+			},
+			{
+				"id": 5,
+				"quantity": 1
+			}
+		],
 		"id": 2
+	},
+	{
+		"products": [],
+		"id": 3
 	}
 ]

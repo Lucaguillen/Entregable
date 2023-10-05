@@ -1,103 +1,44 @@
 [
 	{
-		"title": "producto prueba",
-		"description": "Este es un producto prueba",
-		"price": 5000,
-		"thumbnail": "./img/img.jpg",
+		"title": "titulo",
+		"description": "descripcion",
 		"code": "aaaa",
+		"price": 1000,
 		"stock": 10,
+		"category": "categoria",
+		"thumbnails": [
+			"ruta",
+			"ruta"
+		],
+		"status": false,
 		"id": 1
 	},
 	{
-		"title": "producto prueba",
-		"description": "Este es un producto prueba",
-		"price": 5000,
-		"thumbnail": "./img/img.jpg",
-		"code": "aaaa2",
+		"title": "titulo",
+		"description": "descripcion",
+		"code": "aaaaa",
+		"price": 1000,
 		"stock": 10,
+		"category": "categoria",
+		"thumbnails": [
+			"ruta",
+			"ruta"
+		],
+		"status": false,
 		"id": 2
 	},
 	{
-		"title": "producto prueba",
-		"description": "Este es un producto prueba",
-		"price": 5000,
-		"thumbnail": "./img/img.jpg",
-		"code": "aaaa3",
+		"title": "titulo",
+		"description": "descripcion",
+		"code": "aaaaaa",
+		"price": 1000,
 		"stock": 10,
+		"category": "categoria",
+		"thumbnails": [
+			"ruta",
+			"ruta"
+		],
+		"status": true,
 		"id": 3
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto prueba",
-		"price": 5000,
-		"thumbnail": "./img/img.jpg",
-		"code": "aaaa4",
-		"stock": 10,
-		"id": 4
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto prueba",
-		"price": 5000,
-		"thumbnail": "./img/img.jpg",
-		"code": "aaaa5",
-		"stock": 10,
-		"id": 5
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto prueba",
-		"price": 5000,
-		"thumbnail": "./img/img.jpg",
-		"code": "aaaa6",
-		"stock": 10,
-		"id": 6
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto prueba",
-		"price": 5000,
-		"thumbnail": "./img/img.jpg",
-		"code": "aaaa7",
-		"stock": 10,
-		"id": 7
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto prueba",
-		"price": 5000,
-		"thumbnail": "./img/img.jpg",
-		"code": "aaaa8",
-		"stock": 10,
-		"id": 8
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto prueba",
-		"price": 5000,
-		"thumbnail": "./img/img.jpg",
-		"code": "aaaa9",
-		"stock": 10,
-		"id": 9
-	},
-	{
-		"title": "titulo",
-		"description": "descripcion",
-		"code": "asd",
-		"price": 1000,
-		"status": "true",
-		"stock": 10,
-		"category": "categoria",
-		"id": 11
-	},
-	{
-		"title": "titulo",
-		"description": "descripcion",
-		"code": "asd",
-		"price": 1000,
-		"status": "true",
-		"stock": 10,
-		"category": "categoria",
-		"id": 12
 	}
 ]
