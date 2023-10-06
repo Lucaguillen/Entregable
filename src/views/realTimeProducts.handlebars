@@ -1,0 +1,39 @@
+<h1>Agregar nuevo producto</h1>
+<form action="" id="addproductform">
+
+    <label for="title">titulo:</label>
+    <textarea id="title" name="title" required></textarea>
+
+    <label for="description">descripcion:</label>
+    <textarea id="description" name="description" required></textarea>
+
+    <label for="code">codigo:</label>
+    <textarea id="code" name="code" required></textarea>
+
+    <label for="stock">stock:</label>
+    <textarea id="stock" name="stock"  required></textarea>
+
+    <label for="price">Precio: $</label>
+    <textarea id="price" name="price" required></textarea>
+
+    <label for="status">Estatus:</label>
+    <textarea id="status" name="status" required></textarea>
+
+    <label for="category">Categoria:</label>
+    <textarea id="category" name="category" required></textarea>
+
+    <button type="submit">Agregar Producto</button>
+</form>
+
+<h1>Eliminar producto existente</h1>
+<form id="deleteproductform">
+    <label for="pid">ID del Producto:</label>
+    <input type="text" id="pid" name="pid" required>
+
+    <button type="submit">Eliminar Producto</button>
+</form>
+
+<div id="pcontainer"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

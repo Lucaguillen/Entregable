@@ -1,38 +1,21 @@
 [
 	{
-		"title": "titulo",
+		"id": 2,
+		"title": "producto actualizado2",
 		"description": "descripcion",
-		"code": "aaaa",
+		"code": "asaaaad",
 		"price": 1000,
 		"stock": 10,
 		"category": "categoria",
-		"thumbnails": [
-			"ruta",
-			"ruta"
-		],
-		"status": false,
-		"id": 1
+		"thumbnails": [],
+		"status": true
 	},
 	{
 		"title": "titulo",
 		"description": "descripcion",
-		"code": "aaaaa",
+		"code": "aaasa",
 		"price": 1000,
-		"stock": 10,
-		"category": "categoria",
-		"thumbnails": [
-			"ruta",
-			"ruta"
-		],
-		"status": false,
-		"id": 2
-	},
-	{
-		"title": "titulo",
-		"description": "descripcion",
-		"code": "aaaaaa",
-		"price": 1000,
-		"stock": 10,
+		"stock": 1,
 		"category": "categoria",
 		"thumbnails": [
 			"ruta",

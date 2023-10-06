@@ -59,8 +59,15 @@ export default class ProductManager {
                 return { status: "error", error: "valores incompletos"}
             }
             
-            if (!product.hasOwnProperty('status')) {
+            if ((isNaN(product.price) || product.price <= 0) || (isNaN(product.stock) || product.stock <= 0)) {
+                return { status: "error", error: "El precio y el stock deben ser números válidos y mayores que cero" };
+            }
+            
+
+            if (product.status !== "false") {
                 product.status = true;
+            }else{
+                product.status = false;
             }
             
             if(products.length === 0){

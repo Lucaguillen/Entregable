@@ -41,6 +41,8 @@ router.post("/", async (req, res) =>{
         if (result.status === "error"){
             return res.status(400).send(result)
         }else if(result.status === "success"){
+            const socketServer = req.app.get("socketio")
+            socketServer.emit('showproducts', await productManager.getProducts());
             return res.send({status: "success", message: "producto creaado"})
         }
     } catch (error) {
@@ -56,6 +58,8 @@ router.put("/:pid", async (req, res)=>{
     try {
         const result = await productManager.updateProduct(product,pid);
         if (result.status === "success"){
+            const socketServer = req.app.get("socketio")
+            socketServer.emit('showproducts', await productManager.getProducts());
             res.send(result)
         }else if (result.status === "error" && (result.error === "valores incompletos" || result.error === "no se puede modificar el ID" ||result.error === "ya existe un producto con ese codigo" )){
             return res.status(400).send(result)
@@ -76,7 +80,9 @@ router.delete("/:pid", async (req, res) =>{
         if (result.status === "error"){
            return res.status(404).send(result)
         }if (result.status === "success"){
-           return res.send(result)
+            const socketServer = req.app.get("socketio")
+            socketServer.emit('showproducts', await productManager.getProducts());
+            return res.send(result)
         }
     } catch (error) {
         console.error(error);
