@@ -17,7 +17,7 @@
     <textarea id="price" name="price" required></textarea>
 
     <label for="status">Estatus:</label>
-    <textarea id="status" name="status" required></textarea>
+    <textarea id="status" name="status" ></textarea>
 
     <label for="category">Categoria:</label>
     <textarea id="category" name="category" required></textarea>
@@ -27,7 +27,7 @@
 
 <h1>Eliminar producto existente</h1>
 <form id="deleteproductform">
-    <label for="pid">ID del Producto:</label>
+    <label for="pid">PID del Producto:</label>
     <input type="text" id="pid" name="pid" required>
 
     <button type="submit">Eliminar Producto</button>
@@ -36,4 +36,4 @@
 <div id="pcontainer"></div>
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script>
+<script src="/js/realTimeProducts.js"></script>
