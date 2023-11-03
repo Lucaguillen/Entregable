@@ -5,12 +5,14 @@ import handlebars from "express-handlebars"
 import __dirname from "./utils.js";
 import viewsRouter from "./Routes/views.router.js"
 import { Server } from "socket.io";
-import ProductManager from "../src/dao/dbManagers/products.manager.js";
+import ProductManager from "./dao/dbManagers/products.manager.js"
 import mongoose from "mongoose";
 import MessageManager from "./dao/dbManagers/message.manager.js";
+import CartManager from "./dao/dbManagers/cart.manager.js"
 
 const productManager = new ProductManager();
 const messageManager = new MessageManager()
+const cartManager = new CartManager()
 
 const app = express();
 
@@ -34,8 +36,6 @@ app.set("views", `${__dirname}/views`)
 app.set("view engine","handlebars")
 
 app.use("/",viewsRouter)
-app.use("/chat",viewsRouter)
-app.use("/realtimeproducts", viewsRouter)
 app.use(express.static(`${__dirname}/public`))
 
 const server = app.listen(8080,()=>console.log("Listening on 8080"))
@@ -60,7 +60,21 @@ socketServer.on('connection', async socket => {
     })
 
     //PRODUCTOS
+
+    socket.on("addToCartBtn", async pid =>{
+        const cart = await cartManager.getCartsByID("6544e501bef87d7997ccea14")
+        console.log(cart)
+       /*  const product = {
+            productID: productIdSelected,
+            quantity: 1,
+        }
+        await cartManager.addProductCart(cid,product)
+        console.log({status: "success", message: `Nuevo producto agregado al carrito ${cid}`})  */
+    })
+
     
+    
+    //realtimep´roducts
     socketServer.emit('showproducts', await productManager.getProducts());
 
 

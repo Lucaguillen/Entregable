@@ -1,4 +1,8 @@
 const socket = io();
+
+
+
+
 const addproductform = document.getElementById("addproductform");
 
 addproductform.addEventListener("submit", (event) => {

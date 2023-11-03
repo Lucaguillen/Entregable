@@ -1,19 +1,20 @@
 <div>
-    <h1>home</h1>
-    <div>
-        {{#each products}}
-        <div>
-            <p>{{this.title}}</p>
-            <p>{{this.description}}</p>
-            <p>{{this.code}}</p>
-            <p>{{this.price}}</p>
-            <p>{{this.stock}}</p>
-            <p>{{this.category}}</p>
-            <p>{{this.status}}</p>
-            <p>{{this.pid}}</p>
-        </div>
-        {{/each}}
-    </div>
+    {{#each products}}
+        <p>Titulo: {{this.title}}</p>
+        <p>Descripcion: {{this.description}}</p>
+        <p>Codigo: {{this.code}}</p>
+        <p>$ {{this.price}}</p>
+        <p>Stock: {{this.stock}}</p>
+        <p>Categoria: {{this.category}}</p>
+        <button onclick="addToCart('{{this._id}}')">Agregar al carrito</button>
+    {{/each}}
+    {{#if hasPrevPage}}
+        <a href="/products?page={{prevPage}}"><button>Pagina Anterior</button></a>
+    {{/if}}
+    {{#if hasNextPage}}
+        <a href="/products?page={{nextPage}}"><button>Pagina Siguiente</button></a>
+    {{/if}}
 </div>
+
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script>
+<script src="/js/products.js"></script>

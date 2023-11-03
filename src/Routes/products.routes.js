@@ -1,6 +1,7 @@
 import { Router } from "express";
 import __dirname from "../utils.js";
 import ProductManager from "../dao/dbManagers/products.manager.js";
+import { productsModel } from "../dao/dbManagers/models/products.model.js";
 
 
 const productManager = new ProductManager();
@@ -8,17 +9,55 @@ const productManager = new ProductManager();
 const router = Router()
 
 router.get("/", async (req, res) => {
-    const queryParams = Number(req.query.limit);
+    const { limit, page, sort, query, queryvalue} = req.query;
+    
     try {
-        const products = await productManager.getProducts();
-        if(!queryParams||queryParams > products.length||queryParams<= 0) return res.send(products);
-        const filteredLimit = products.filter(p=>p.pid<=queryParams)
-        res.send(filteredLimit)
+        const filter = {
+            $or: [
+                { category: { $regex: queryvalue || "", $options: "i" } },
+                { stock: { $gte: Number(queryvalue) || 0 } } 
+            ]
+        };
+        
+
+        const options = {
+            limit: Number(limit) || 10,
+            page: Number(page) || 1,
+        };
+
+        if (sort === "1" || sort === "-1") {
+            options.sort = { price: Number(sort) };
+        }
+
+        const products = await productsModel.paginate(filter, options);
+        let prevLink = ""
+        let nextLink = ""
+        if (products.hasPrevPage) {
+            prevLink = `localhost:8080/api/products?page=${products.prevPage}`;
+        }else{
+            prevLink = null
+        }
+        
+        if (products.hasNextPage) {
+            nextLink = `localhost:8080/api/products?page=${products.nextPage}`;
+        }else{
+            nextLink = null
+        }
+
+        
+        return res.send({
+            status: "success",
+            payload: products,
+            prevLink,
+            nextLink
+
+        });
     } catch (error) {
         console.error(error);
         res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
     }
 })
+
 
 router.get("/:id", async (req, res)=>{
     try {
@@ -35,7 +74,7 @@ router.get("/:id", async (req, res)=>{
 
 router.post("/", async (req, res) =>{
     
-    const {title, description, code, price, stock, category, thumbnails, status, pid } = req.body
+    const {title, description, code, price, stock, category, thumbnails, status } = req.body
     
     if(!title || !description || !code || !price || !stock || ! category){
         return res.status(400).send({status: "error", message: "valores incompletos"})
@@ -43,11 +82,6 @@ router.post("/", async (req, res) =>{
     
     const allProducts = await productManager.getProducts();
 
-    if(allProducts.length === 0){
-        req.body.pid = 1;
-    }else{
-        req.body.pid = allProducts[allProducts.length -1].pid + 1;
-    }
     
     if (allProducts.some(p => p.code === req.body.code)){
         return { status: "error", error: "ya existe un producto con ese codigo"}
@@ -83,9 +117,7 @@ router.put("/:id", async (req, res)=>{
          !productToUpdate.price || !productToUpdate.stock || !productToUpdate.category){
         return res.status(400).send({status: "error", message: "valores incompletos"})
     }
-    if (productToUpdate.pid){
-        return res.status(400).send({ status: "error", error: "no se puede modificar el PID"})
-    }
+    
     if (products.some(p => p.code === productToUpdate.code)){
         return res.status(400).send({ status: "error", error: "ya existe un producto con ese codigo"})
     } 

@@ -1,0 +1,15 @@
+<div>
+    {{#each cart.productsCart}} 
+        <p>Titulo: {{this.productID.title}}</p> 
+        <p>Descripcion: {{this.productID.description}}</p>
+        <p>Codigo: {{this.productID.code}}</p> 
+        <p>$ {{this.productID.price}}</p> 
+        <p>Stock: {{this.productID.stock}}</p> 
+        <p>Categoria: {{this.productID.category}}</p> 
+        <p>Cantidad: {{this.quantity}}</p> 
+    {{/each}}
+</div>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/cart.js"></script>

@@ -2,6 +2,7 @@ import fs from "fs";
 import __dirname from "../../utils.js";
 import { cartsModel } from "./models/carts.model.js";
 
+
  
 export default class CartManager {
     constructor(path) {
@@ -11,6 +12,11 @@ export default class CartManager {
         const carts = await cartsModel.find().lean()
         return carts
     }  
+    getCartsByID = async (cid) => {
+        const carts = await cartsModel.findById(cid)
+        return carts
+    } 
+
     createCart = async (newCart) =>{
         try {
             const cartAdded = await cartsModel.create(newCart)
@@ -21,23 +27,53 @@ export default class CartManager {
         }
     }
     getCartProducts = async (cid)=>{
-       const cart = await cartsModel.findOne(
-        {id: cid}
-       ).select("products").lean()
+        const cart = await cartsModel
+        .findOne({ _id: cid })
+        .populate({
+            path: 'productsCart.productID',
+            model: 'products'
+        })
+        .lean();
        return cart
     }
-    addProductCart = async (cid,product) => {
-        const result = await cartsModel.findOneAndUpdate(
-            { id: cid },
-            { $push: { products: product } },
+    deleteCartProduct = async (cid, pid) => {
+        const deleted = await cartsModel.updateOne(
+          { _id: cid }, { $pull: { productsCart: { productID: pid } } }
         );
+        return deleted;
+    }
+      
+    addProductCart = async (cid,product) => {
+        const result = await cartsModel.findOne({ _id: cid });
+        result.productsCart.push(product)
+        await result.save()
     }
 
     addQuantiyToProduct = async(cid,product) => {
         const cart = await cartsModel.findOneAndUpdate(
-            { id: cid, "products.id": product.id },
-            { $inc: { "products.$.quantity": 1 } }
+            { _id: cid, "productsCart.productID": product.productID },
+            { $inc: { "productsCart.$.quantity": 1 } }
         );
         
+    }
+    updateCartArray = async(cid,products)=>{
+        const updatedCart = await cartsModel.findByIdAndUpdate(
+            { _id: cid},
+            {$push: { productsCart: products } }
+        )
+    }
+    updateQuantiyToProduct = async (cid, pid, quantityValue) => {
+        const updatedCart = await cartsModel.findOneAndUpdate(
+          {_id: cid,"productsCart.productID": pid},
+          {$inc: { "productsCart.$.quantity": quantityValue }},
+        );
+        return updatedCart;
+    }
+    emptyCart = async (cid) =>{
+        const emptyCart = await cartsModel.findOneAndUpdate(
+            {_id: cid},
+            {$set: { productsCart: [] } }
+        );
+        return emptyCart;
     }
 } 
