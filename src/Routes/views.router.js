@@ -11,9 +11,33 @@ const router = Router()
 const productManager = new ProductManager()
 const cartManager = new CartManager()
 
+// SESSION
+
+const publico = (req, res, next) => {
+    if(req.session?.user) return res.redirect('/');
+    next();
+}
+
+const privado = (req, res, next) => {
+    if(!req.session?.user) return res.redirect('/login');
+    next();
+}
+
+router.get('/login', publico, (req, res) => {
+    res.render('login')
+});
+
+router.get('/register', publico, (req, res) => {
+    res.render('register')
+});
+
+router.get('/', privado, (req, res) => {
+    res.render('home')
+});
+
 
 //CHAT
-router.get("/chat", async (req, res)=>{
+router.get("/chat", privado, async (req, res)=>{
     try {
         res.render("chat")
     } catch (error) {
@@ -23,13 +47,14 @@ router.get("/chat", async (req, res)=>{
 
 //PRODUCTOS
 
-router.get("/products", async (req, res)=>{
+router.get("/products", privado, async (req, res)=>{
     try {
         const {page = 1} = req.query
         const {docs, hasPrevPage, hasNextPage, nextPage, prevPage} = await productsModel
         .paginate({},{limit: 4, page, lean: true})
         res.render("home",{
-            products: docs,hasPrevPage,hasNextPage,nextPage,prevPage
+            products: docs,hasPrevPage,hasNextPage,nextPage,prevPage,
+            user: req.session.user
         })
     } catch (error) {
         console.error(error.message)
@@ -37,7 +62,7 @@ router.get("/products", async (req, res)=>{
 })
 // CART
 
-router.get("/:cid", async (req, res)=>{
+router.get("/:cid", privado, async (req, res)=>{
     try {
         const {cid} = req.params
         const cart = await cartManager.getCartProducts(cid)

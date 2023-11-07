@@ -9,18 +9,16 @@ import ProductManager from "./dao/dbManagers/products.manager.js"
 import mongoose from "mongoose";
 import MessageManager from "./dao/dbManagers/message.manager.js";
 import CartManager from "./dao/dbManagers/cart.manager.js"
+import sessionsRouter from "./Routes/sessions.routes.js"
+import session from "express-session";
+import MongoStore from "connect-mongo";
+
 
 const productManager = new ProductManager();
 const messageManager = new MessageManager()
 const cartManager = new CartManager()
 
 const app = express();
-
-app.use(express.json())
-app.use(express.urlencoded({extended: true}));
-
-app.use("/api/products", productsRouter);
-app.use("/api/carts", cartsRouter);
 
 // DB CONNECTION
 try {
@@ -29,6 +27,26 @@ try {
 } catch (error) {
     console.log(error.message)
 }
+
+app.use(express.json())
+app.use(express.urlencoded({extended: true}));
+
+app.use("/api/products", productsRouter);
+app.use("/api/carts", cartsRouter);
+
+// sesionss
+
+app.use(session({
+    store: MongoStore.create({
+        client: mongoose.connection.getClient(),
+        ttl: 5000
+    }),
+    secret: 'Secreto12345',
+    resave: true, 
+    saveUninitialized: true, 
+}));
+
+app.use('/api/sessions', sessionsRouter);
 
 //handlebars
 app.engine("handlebars", handlebars.engine())
