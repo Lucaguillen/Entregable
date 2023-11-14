@@ -1,6 +1,6 @@
 import fs from "fs";
 import { productsModel } from "./models/products.model.js";
-import __dirname from "../../utils.js";
+import { __dirname }  from "../../utils.js";
 
 
 export default class ProductManager {

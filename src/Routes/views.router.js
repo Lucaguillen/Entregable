@@ -1,15 +1,14 @@
 import { Router } from "express";
-import __dirname from "../utils.js";
+import { __dirname } from "../utils.js";
 import ProductManager from "../dao/dbManagers/products.manager.js";
 import { productsModel } from "../dao/dbManagers/models/products.model.js";
 import CartManager from "../dao/dbManagers/cart.manager.js";
-
-
 
 const router = Router()
 
 const productManager = new ProductManager()
 const cartManager = new CartManager()
+
 
 // SESSION
 
@@ -32,7 +31,7 @@ router.get('/register', publico, (req, res) => {
 });
 
 router.get('/', privado, (req, res) => {
-    res.render('home')
+    return res.redirect('/products')
 });
 
 

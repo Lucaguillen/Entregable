@@ -1,5 +1,5 @@
 import { Router } from "express";
-import __dirname from "../utils.js";
+import { __dirname } from "../utils.js";
 import CartManager from "../dao/dbManagers/cart.manager.js";
 import { cartsModel } from "../dao/dbManagers/models/carts.model.js";
 import mongoose from "mongoose";

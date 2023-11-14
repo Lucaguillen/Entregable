@@ -2,7 +2,7 @@ import express from "express";
 import productsRouter from "./Routes/products.routes.js"
 import cartsRouter from "./Routes/carts.routes.js"
 import handlebars from "express-handlebars"
-import __dirname from "./utils.js";
+import { __dirname } from "./utils.js";
 import viewsRouter from "./Routes/views.router.js"
 import { Server } from "socket.io";
 import ProductManager from "./dao/dbManagers/products.manager.js"
@@ -12,6 +12,8 @@ import CartManager from "./dao/dbManagers/cart.manager.js"
 import sessionsRouter from "./Routes/sessions.routes.js"
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import { initializePassport } from "./config/passport.config.js";
+import passport from "passport";
 
 
 const productManager = new ProductManager();
@@ -45,6 +47,10 @@ app.use(session({
     resave: true, 
     saveUninitialized: true, 
 }));
+
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use('/api/sessions', sessionsRouter);
 

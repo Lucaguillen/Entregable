@@ -1,5 +1,5 @@
 import { messageModel } from "./models/message.model.js";
-import __dirname from "../../utils.js";
+import { __dirname }  from "../../utils.js";
 
 
 export default class MessageManager {
