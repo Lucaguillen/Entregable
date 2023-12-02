@@ -1,20 +1,27 @@
 const form = document.getElementById('loginForm');
 
-form.addEventListener('submit', e => {
+
+form.addEventListener('submit', async e => {
     e.preventDefault();
-    const data = new FormData(form);
-    const obj = {};
    
-    data.forEach((value, key) => obj[key] = value);
-    fetch('/api/sessions/login', {
+    const obj = {
+        email: loginForm[0].value,
+        password: loginForm[1].value
+    }
+    
+    const respuesta = await fetch('/api/sessions/login', {
         method: 'POST',
-        body: JSON.stringify(obj),
         headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then(result => {
-        if (result.status === 200) {
-            window.location.replace('/products');
-        }
-    })
+            "Accept" : "application/json",
+            "Content-Type" : "application/json"
+        },
+        body: JSON.stringify(obj)
+    });
+   
+
+    if (respuesta.status === 200) {
+        location.href = "/products"
+    }else{
+        location.href = "/login"
+    }
 })

@@ -14,6 +14,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import { initializePassport } from "./config/passport.config.js";
 import passport from "passport";
+import cookieParser from "cookie-parser";
 
 
 const productManager = new ProductManager();
@@ -39,10 +40,6 @@ app.use("/api/carts", cartsRouter);
 // sesionss
 
 app.use(session({
-    store: MongoStore.create({
-        client: mongoose.connection.getClient(),
-        ttl: 5000
-    }),
     secret: 'Secreto12345',
     resave: true, 
     saveUninitialized: true, 
@@ -51,6 +48,7 @@ app.use(session({
 initializePassport()
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(cookieParser())
 
 app.use('/api/sessions', sessionsRouter);
 

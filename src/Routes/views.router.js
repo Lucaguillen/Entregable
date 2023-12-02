@@ -1,8 +1,10 @@
 import { Router } from "express";
-import { __dirname } from "../utils.js";
+import { __dirname, authotization } from "../utils.js";
 import ProductManager from "../dao/dbManagers/products.manager.js";
 import { productsModel } from "../dao/dbManagers/models/products.model.js";
 import CartManager from "../dao/dbManagers/cart.manager.js";
+import passport from "passport";
+import { passportCall } from "../config/passport.config.js";
 
 const router = Router()
 
@@ -10,33 +12,22 @@ const productManager = new ProductManager()
 const cartManager = new CartManager()
 
 
-// SESSION
 
-const publico = (req, res, next) => {
-    if(req.session?.user) return res.redirect('/');
-    next();
-}
-
-const privado = (req, res, next) => {
-    if(!req.session?.user) return res.redirect('/login');
-    next();
-}
-
-router.get('/login', publico, (req, res) => {
+router.get('/login', (req, res) => {
     res.render('login')
 });
 
-router.get('/register', publico, (req, res) => {
+router.get('/register', (req, res) => {
     res.render('register')
 });
 
-router.get('/', privado, (req, res) => {
-    return res.redirect('/products')
+router.get('/', (req, res) => {
+    return res.redirect('/login')
 });
 
 
 //CHAT
-router.get("/chat", privado, async (req, res)=>{
+router.get("/chat", async (req, res)=>{
     try {
         res.render("chat")
     } catch (error) {
@@ -46,14 +37,15 @@ router.get("/chat", privado, async (req, res)=>{
 
 //PRODUCTOS
 
-router.get("/products", privado, async (req, res)=>{
+router.get("/products", passportCall("jwt"),authotization("user"),  async (req, res)=>{
     try {
         const {page = 1} = req.query
         const {docs, hasPrevPage, hasNextPage, nextPage, prevPage} = await productsModel
         .paginate({},{limit: 4, page, lean: true})
         res.render("home",{
             products: docs,hasPrevPage,hasNextPage,nextPage,prevPage,
-            user: req.session.user
+            user: req.user
+            
         })
     } catch (error) {
         console.error(error.message)
@@ -61,7 +53,7 @@ router.get("/products", privado, async (req, res)=>{
 })
 // CART
 
-router.get("/:cid", privado, async (req, res)=>{
+router.get("/:cid", async (req, res)=>{
     try {
         const {cid} = req.params
         const cart = await cartManager.getCartProducts(cid)
