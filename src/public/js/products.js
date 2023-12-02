@@ -21,6 +21,9 @@ const addToCart = (_id) =>{
     .catch(error => {
         console.error('Error de red al agregar el producto al carrito:', error);
     });
-
+   
 }
+
+
+
 

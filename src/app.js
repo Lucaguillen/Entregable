@@ -3,13 +3,13 @@ import productsRouter from "./Routes/products.routes.js"
 import cartsRouter from "./Routes/carts.routes.js"
 import handlebars from "express-handlebars"
 import { __dirname } from "./utils.js";
-import viewsRouter from "./Routes/views.router.js"
+import ViewsRouter from "./Routes/views.router.js"
 import { Server } from "socket.io";
 import ProductManager from "./dao/dbManagers/products.manager.js"
 import mongoose from "mongoose";
 import MessageManager from "./dao/dbManagers/message.manager.js";
 import CartManager from "./dao/dbManagers/cart.manager.js"
-import sessionsRouter from "./Routes/sessions.routes.js"
+import SessionsRouter from "./Routes/sessions.routes.js"
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import { initializePassport } from "./config/passport.config.js";
@@ -20,6 +20,9 @@ import cookieParser from "cookie-parser";
 const productManager = new ProductManager();
 const messageManager = new MessageManager()
 const cartManager = new CartManager()
+
+const sessionsRouter = new SessionsRouter()
+const viewsRouter = new ViewsRouter()
 
 const app = express();
 
@@ -39,6 +42,8 @@ app.use("/api/carts", cartsRouter);
 
 // sesionss
 
+app.use(cookieParser())
+
 app.use(session({
     secret: 'Secreto12345',
     resave: true, 
@@ -48,16 +53,16 @@ app.use(session({
 initializePassport()
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(cookieParser())
 
-app.use('/api/sessions', sessionsRouter);
+
+app.use('/api/sessions', sessionsRouter.getRouter());
 
 //handlebars
 app.engine("handlebars", handlebars.engine())
 app.set("views", `${__dirname}/views`)
 app.set("view engine","handlebars")
 
-app.use("/",viewsRouter)
+app.use("/",viewsRouter.getRouter())
 app.use(express.static(`${__dirname}/public`))
 
 const server = app.listen(8080,()=>console.log("Listening on 8080"))
