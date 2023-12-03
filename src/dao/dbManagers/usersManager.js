@@ -14,6 +14,19 @@ export default class usersManager {
         const user = await usersModel.findOne({email: emailSend})
         return user
     }
+    setCartToUser = async (cid,uid) =>{
+        try {
+            const user = await usersModel.findOneAndUpdate(
+                {_id: uid},
+                {$push: {"cart.id": cid}},
+                {new: true}
+            )
+        } catch (error) {
+            console.error(error.message)
+        }
+
+
+    }
 } 
 
 

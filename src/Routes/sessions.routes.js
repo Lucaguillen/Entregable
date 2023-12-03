@@ -1,6 +1,7 @@
 import Router from "./router.js"
 import {createHash, generateToken, isValidPassword} from "../utils.js"
 import usersManager from "../dao/dbManagers/usersManager.js";
+import CartManager from "../dao/dbManagers/cart.manager.js";
 import { accessRolesEnum, passportStrategiesEnum } from "../config/enumns.js";
 
 
@@ -8,6 +9,7 @@ export default class SessionsRouter extends Router{
     constructor(){
         super()
         this.usermanager = new usersManager()
+        this.cartManager = new CartManager()
     }
     init() {
 
@@ -81,6 +83,10 @@ export default class SessionsRouter extends Router{
             }
             
             const result = await this.usermanager.create(user);
+
+            const newCart = {productsCart: []};
+            const createCart = await this.cartManager.createCart(newCart, result.email)
+            
 
             res.status(201).send({status: 'success', message: 'Usuario Registrado'}) 
         } catch (error) {

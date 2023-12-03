@@ -45,6 +45,16 @@ export default class Router {
         )
     }
 
+    delete(path, policies,strategy, ...callbacks) {
+        this.router.put(
+            path,
+            this.applyCustomPassportCall(strategy),
+            this.handlePolicies(policies),
+            this.generateCustomResponse,
+            this.applyCallbacks(callbacks)
+        )
+    }
+
     generateCustomResponse = (req, res, next) => {
         res.sendSuccess = (data) => {
             res.status(200).json({ data });

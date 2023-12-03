@@ -26,7 +26,7 @@ export default class ViewsRouter extends Router{
             return res.render("chat")
         })
 
-        this.get("/:cid", [accessRolesEnum.USER] , passportStrategiesEnum.JWT, this.getcart)
+        this.get("/cart", [accessRolesEnum.USER] , passportStrategiesEnum.JWT, this.getcart)
 
         this.get('/', [accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING, async (req, res) => {
             return res.redirect('/login')
@@ -37,9 +37,12 @@ export default class ViewsRouter extends Router{
 
     async getcart (req, res){
         try {
-            const {cid} = req.params
+            const cid = req.user.cart.id
             const cart = await this.cartManager.getCartProducts(cid)
-            res.render("cart",{cart})
+            res.render("cart",{
+                cart,
+                user:req.user
+            })
         } catch (error) {
             console.error(error.message)
         }
@@ -47,13 +50,14 @@ export default class ViewsRouter extends Router{
 
     async getproducts (req, res){
         try {
-            
+            const cid = req.user.cart.id
             const {page = 1} = req.query
             const {docs, hasPrevPage, hasNextPage, nextPage, prevPage} = await productsModel
             .paginate({},{limit: 4, page, lean: true})
             res.render("home",{
-                products: docs,hasPrevPage,hasNextPage,nextPage,prevPage,
-                user: req.user
+                user: req.user,
+                products: docs,hasPrevPage,hasNextPage,nextPage,prevPage,cid
+                
                 
             })
         } catch (error) {

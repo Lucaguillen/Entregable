@@ -2,17 +2,16 @@ const socket = io();
 
 //products
 
-const addToCart = (_id) =>{
-    const cid = "6544e501bef87d7997ccea14"; 
-    const pid = _id; 
 
-    fetch(`/api/carts/${cid}/product/${pid}`, {
+const addToCart = (_id) =>{
+    const pid = _id; 
+    fetch(`/api/carts/product/${pid}`, {
         method: 'POST',
     })
     .then(response => {
         if (response.ok) {
             
-            console.log(`Producto con ID ${pid} agregado al carrito con ID ${cid}.`);
+            console.log(`Producto con ID ${pid} agregado al carrito.`);
         } else {
             
             console.error('Error al agregar el producto al carrito.');
@@ -23,7 +22,3 @@ const addToCart = (_id) =>{
     });
    
 }
-
-
-
-

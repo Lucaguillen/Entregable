@@ -1,6 +1,6 @@
 import express from "express";
 import productsRouter from "./Routes/products.routes.js"
-import cartsRouter from "./Routes/carts.routes.js"
+import CartRouter from "./Routes/carts.routes.js"
 import handlebars from "express-handlebars"
 import { __dirname } from "./utils.js";
 import ViewsRouter from "./Routes/views.router.js"
@@ -23,6 +23,7 @@ const cartManager = new CartManager()
 
 const sessionsRouter = new SessionsRouter()
 const viewsRouter = new ViewsRouter()
+const cartRouter = new CartRouter()
 
 const app = express();
 
@@ -37,8 +38,8 @@ try {
 app.use(express.json())
 app.use(express.urlencoded({extended: true}));
 
-app.use("/api/products", productsRouter);
-app.use("/api/carts", cartsRouter);
+
+
 
 // sesionss
 
@@ -54,15 +55,17 @@ initializePassport()
 app.use(passport.initialize())
 app.use(passport.session())
 
-
+app.use("/api/products", productsRouter);
+app.use("/api/carts", cartRouter.getRouter());
 app.use('/api/sessions', sessionsRouter.getRouter());
+app.use("/",viewsRouter.getRouter())
 
 //handlebars
 app.engine("handlebars", handlebars.engine())
 app.set("views", `${__dirname}/views`)
 app.set("view engine","handlebars")
 
-app.use("/",viewsRouter.getRouter())
+
 app.use(express.static(`${__dirname}/public`))
 
 const server = app.listen(8080,()=>console.log("Listening on 8080"))

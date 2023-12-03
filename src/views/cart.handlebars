@@ -1,12 +1,16 @@
 <div>
+    <h1>Carrito de {{user.first_name}}!</h1>
+    <button onclick="emptyCart('{{user.cart.id}}')">Vaciar Carrito</button>
+
     {{#each cart.productsCart}} 
         <p>Titulo: {{this.productID.title}}</p> 
         <p>Descripcion: {{this.productID.description}}</p>
         <p>Codigo: {{this.productID.code}}</p> 
         <p>$ {{this.productID.price}}</p> 
         <p>Stock: {{this.productID.stock}}</p> 
-        <p>Categoria: {{this.productID.category}}</p> 
         <p>Cantidad: {{this.quantity}}</p> 
+        <button onclick="addQuantity('{{this._id}}')">+</button>
+        <button onclick="removeQuantity('{{this._id}}')">-</button>
     {{/each}}
 </div>
 

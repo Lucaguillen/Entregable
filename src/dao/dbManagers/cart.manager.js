@@ -1,8 +1,9 @@
 import fs from "fs";
 import { __dirname } from "../../utils.js";
 import { cartsModel } from "./models/carts.model.js";
+import UsersManager from "./usersManager.js";
 
-
+const userManager = new UsersManager()
  
 export default class CartManager {
     constructor(path) {
@@ -17,13 +18,15 @@ export default class CartManager {
         return carts
     } 
 
-    createCart = async (newCart) =>{
+    createCart = async (newCart, email) =>{
         try {
+            const user = await userManager.findByEmail(email)
             const cartAdded = await cartsModel.create(newCart)
+            const setCart = await userManager.setCartToUser(cartAdded, user._id)
             return cartAdded
             
         } catch (error) {
-            console.error(error);
+            console.error(error.message);
         }
     }
     getCartProducts = async (cid)=>{
