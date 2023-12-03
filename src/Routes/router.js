@@ -67,11 +67,10 @@ export default class Router {
         const user = jwt.verify(authToken, PRIVATE_KEY);
         
         
-        console.log('Policies:', policies);
         if(!policies.includes(user.user.role))
             return res.status(403).json({ error: 'not permissions' });
 
-        req.user = user;
+        req.user = user.user;
         next();
     }
 

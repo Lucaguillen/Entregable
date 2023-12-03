@@ -16,18 +16,7 @@ export default class SessionsRouter extends Router{
         })
         
         
-        /* //GITHUB
         
-        this.get('/github', passport.authenticate('github',{scope:['user:email']}), async(req, res) => {
-           res.send({ status: 'success', message: 'usuario registrado'}) 
-        })
-        
-        this.get('/github-callback', passport.authenticate('github', {failureRedirect: '/login'}), async(req,res) => {
-            const user = req.user
-            const accessToken = generateToken(user)
-            res.cookie("coderCookieToken", accessToken, {maxAge: 24*60*60*1000, httpOnly: true })
-            res.redirect('/products')
-        }) */
 
         this.post("/login", ["public"] , async (req,res)=>{
             try {
@@ -55,15 +44,7 @@ export default class SessionsRouter extends Router{
             res.status(500).send({status: 'error', message: 'falla en el registro'})
         })
 
-        this.get('/logout',["public"] , (req, res) => {
-            try {
-                res.clearCookie('coderCookieToken');
-                res.redirect("/login");
-            } catch (error) {
-                console.error('Error al realizar la operación de logout:', error);
-                res.status(500).send({ status: 'error', message: error.message });
-            }
-        });
+        
 
     }
 }

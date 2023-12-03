@@ -1,5 +1,5 @@
 import Router from "./router.js";
-import { __dirname } from "../utils.js";
+import { __dirname, generateToken } from "../utils.js";
 import ProductManager from "../dao/dbManagers/products.manager.js";
 import { productsModel } from "../dao/dbManagers/models/products.model.js";
 import CartManager from "../dao/dbManagers/cart.manager.js";
@@ -27,6 +27,28 @@ export default class ViewsRouter extends Router{
             return res.redirect('/login')
         });
         
+        this.get('/logout',["public"] , (req, res) => {
+            try {
+                res.clearCookie('coderCookieToken');
+                res.redirect("/login");
+            } catch (error) {
+                console.error('Error al realizar la operación de logout:', error);
+                res.status(500).send({ status: 'error', message: error.message });
+            }
+        });
+
+        //GITHUB
+        
+        this.get('/github', ["public"], passport.authenticate('github',{scope:['user:email']}), async(req, res) => {
+            res.send({ status: 'success', message: 'usuario registrado'}) 
+        })
+         
+        this.get('/github-callback',["public"],  passport.authenticate('github', {failureRedirect: '/login'}), async(req,res) => {
+            const user = req.user
+            const accessToken = generateToken(user)
+            res.cookie("coderCookieToken", accessToken, {maxAge: 24*60*60*1000, httpOnly: true })
+            res.redirect('/products')
+        })
         
         //CHAT
         this.get("/chat", ["user"] , async (req, res)=>{
@@ -41,6 +63,7 @@ export default class ViewsRouter extends Router{
 
         this.get("/products", ["user"],  async (req, res)=>{
             try {
+                
                 const {page = 1} = req.query
                 const {docs, hasPrevPage, hasNextPage, nextPage, prevPage} = await productsModel
                 .paginate({},{limit: 4, page, lean: true})
