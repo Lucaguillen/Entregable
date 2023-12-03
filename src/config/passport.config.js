@@ -60,43 +60,6 @@ const initializePassport = () =>{
         }
     }));
 
-    
-    //LOCAL STRATEGY
-
-    //REGISTRO
-
-    passport.use('register', new LocalStrategy({
-        passReqToCallback: true, 
-        usernameField: 'email'
-    }, async (req, username, password, done) => {
-        try {
-            const { first_name, last_name, age } = req.body;
-            const user = await usersModel.findOne({ email: username });
-            
-            if(user) {
-                return done(null, false);
-            }
-
-            const newUser = {
-                first_name,
-                last_name,
-                email: username,
-                age,
-                password: createHash(password)
-            }
-            
-            if(username === "adminCoder@coder.com" && password === "adminCod3r123"){
-                newUser.role = "admin"
-            }
-            
-            const result = await usersModel.create(newUser);
-
-            return done(null, result); 
-        } catch (error) {
-            return done(error.message)
-        }
-    }));
-
     passport.serializeUser ((user, done) => {
         done(null, user._id)
     })

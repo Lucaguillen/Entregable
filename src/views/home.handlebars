@@ -3,7 +3,7 @@
     <p>Correo electronico: {{user.email}}</p>
     <p>edad: {{user.age}}</p>
     <p>rol: {{user.role}}</p>
-    <a href="/logout"><button>Cerrar sesion</button></a>
+    <a href="/api/sessions/logout"><button>Cerrar sesion</button></a>
     
     {{#each products}}
         <p>Titulo: {{this.title}}</p>

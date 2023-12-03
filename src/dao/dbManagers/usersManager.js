@@ -1,11 +1,11 @@
-import { __dirname }  from "../../utils.js";
+import { __dirname } from "../../utils.js";
 import usersModel from "./models/users.model.js";
 
 export default class usersManager {
     constructor(path) {
         this.path = path;
     }
-    save = async (newuser) => {
+    create = async (newuser) => {
         const user = await usersModel.create(newuser)
         return user
     }  
@@ -15,7 +15,5 @@ export default class usersManager {
         return user
     }
 } 
-
-
 
 

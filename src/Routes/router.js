@@ -1,6 +1,6 @@
 import { Router as expressRouter } from 'express';
-import jwt from 'jsonwebtoken';
-import { PRIVATE_KEY } from '../utils.js';
+import passport from 'passport';
+import { accessRolesEnum, passportStrategiesEnum } from '../config/enumns.js';
 
 export default class Router {
     constructor() {
@@ -15,27 +15,30 @@ export default class Router {
     init() {}
 
 
-    get(path, policies, ...callbacks) {
+    get(path, policies,strategy, ...callbacks) {
         this.router.get(
             path,
+            this.applyCustomPassportCall(strategy),
             this.handlePolicies(policies),
             this.generateCustomResponse,
             this.applyCallbacks(callbacks)
         )
     }
 
-    post(path, policies, ...callbacks) {
+    post(path, policies,strategy, ...callbacks) {
         this.router.post(
             path,
+            this.applyCustomPassportCall(strategy),
             this.handlePolicies(policies),
             this.generateCustomResponse,
             this.applyCallbacks(callbacks)
         )
     }
 
-    put(path, policies, ...callbacks) {
+    put(path, policies,strategy, ...callbacks) {
         this.router.put(
             path,
+            this.applyCustomPassportCall(strategy),
             this.handlePolicies(policies),
             this.generateCustomResponse,
             this.applyCallbacks(callbacks)
@@ -58,19 +61,41 @@ export default class Router {
         next();
     }
 
-    handlePolicies = (policies) => (req, res, next) => {
-        if(policies[0] === 'public') return next();
-        const authToken = req.cookies.coderCookieToken
-        if(!authToken) return res.status(401).json({ error: 'no token provide' });
-        
-        
-        const user = jwt.verify(authToken, PRIVATE_KEY);
-        
-        
-        if(!policies.includes(user.user.role))
-            return res.status(403).json({ error: 'not permissions' });
+    applyCustomPassportCall = (Strategy) => (req, res, next) =>{
+        if(Strategy === passportStrategiesEnum.JWT) {
+            passport.authenticate(Strategy, {session: false}, function (err, user, info) {
+                if(err) return next(err)
+                if(!user){
+                    return res.status(401).send({
+                        error: info.messages ? info.messages : info.toString()
+                    })
+                }
+                req.user = user
+                next()
+            })(req, res, next)
+        }else if(Strategy === passportStrategiesEnum.GITHUB){
+            passport.authenticate(Strategy,{scope:["user:email"]}, function (err, user, info) {
+                if(err) return next(err)
+                if(!user){
+                    return res.status(401).send({
+                        error: info.messages ? info.messages : info.toString()
+                    })
+                }
+                req.user = user
+                next()
+            })(req, res, next)
+        }else{
+            next();
+        }
+    }
 
-        req.user = user.user;
+    handlePolicies = (policies) => (req, res, next) => {
+        if(policies[0] === accessRolesEnum.PUBLIC) return next();
+        const user = req.user 
+        if(!user) return res.status(401).json({ error: 'no token provide' }); 
+        if(!policies.includes(user.role)) return res.status(403).json({ error: 'not permissions' });
+
+      
         next();
     }
 
