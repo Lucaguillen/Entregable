@@ -11,9 +11,14 @@ export default class usersManager {
     }  
     
     findByEmail = async (emailSend) =>{
-        const user = await usersModel.findOne({email: emailSend})
+        const user = await usersModel.findOne({email: emailSend}).populate({
+            path: 'cart.id',
+            model: 'carts'
+        })
+        .lean();
         return user
     }
+
     setCartToUser = async (cid,uid) =>{
         try {
             const user = await usersModel.findOneAndUpdate(

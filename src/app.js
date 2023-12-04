@@ -21,9 +21,10 @@ const productManager = new ProductManager();
 const messageManager = new MessageManager()
 const cartManager = new CartManager()
 
+const cartRouter = new CartRouter()
 const sessionsRouter = new SessionsRouter()
 const viewsRouter = new ViewsRouter()
-const cartRouter = new CartRouter()
+
 
 const app = express();
 

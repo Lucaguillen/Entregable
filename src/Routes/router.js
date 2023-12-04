@@ -46,7 +46,7 @@ export default class Router {
     }
 
     delete(path, policies,strategy, ...callbacks) {
-        this.router.put(
+        this.router.delete(
             path,
             this.applyCustomPassportCall(strategy),
             this.handlePolicies(policies),

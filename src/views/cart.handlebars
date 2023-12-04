@@ -9,11 +9,14 @@
         <p>$ {{this.productID.price}}</p> 
         <p>Stock: {{this.productID.stock}}</p> 
         <p>Cantidad: {{this.quantity}}</p> 
-        <button onclick="addQuantity('{{this._id}}')">+</button>
-        <button onclick="removeQuantity('{{this._id}}')">-</button>
+        <button onclick="addToCart('{{this.productID._id}}')">+</button>
+        <button onclick="removeQuantity('{{this.productID._id}}')">-</button>
+        <button onclick="removeProduct('{{this.productID._id}}')">X</button>
     {{/each}}
 </div>
 
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/cart.js"></script>
+
+

@@ -59,6 +59,12 @@ export default class CartManager {
         );
         
     }
+    removeQuantiyToProduct = async(cid,pid) => {
+        const cart = await cartsModel.findOneAndUpdate(
+            { _id: cid, "productsCart.productID": pid },
+            { $inc: { "productsCart.$.quantity": -1 } }
+        );   
+    }
     updateCartArray = async(cid,products)=>{
         const updatedCart = await cartsModel.findByIdAndUpdate(
             { _id: cid},

@@ -13,6 +13,9 @@ export default class SessionsRouter extends Router{
     }
     init() {
 
+        this.get("/current", [accessRolesEnum.USER], passportStrategiesEnum.JWT ,this.current)
+
+
         this.post("/login", [accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING ,this.login)
         this.post('/register',[accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING, this.register)
         this.get('/logout',[accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING, this.logout)
@@ -36,6 +39,17 @@ export default class SessionsRouter extends Router{
         } catch (error) {
             console.error("falla en el inicio se session con GIT-HUB")
             res.redirect("/login")
+        }
+    }
+
+    async current (req, res){
+        try {
+            const {email} = req.user
+            const user = await this.usermanager.findByEmail(email)
+            return res.sendSuccess(user)
+        } catch (error) {
+            console.error('Error al realizar la operación de logout:', error);
+            res.sendServerError(error.message)
         }
     }
 

@@ -10,13 +10,14 @@ export default class CartRouter extends Router {
         this.cartManager = new CartManager()
     }
     init(){
-        this.post("/", [accessRolesEnum.USER], passportStrategiesEnum.JWT, this.createOne)
-        this.get("/:cid",[accessRolesEnum.USER], passportStrategiesEnum.JWT, this.cartbyid)
-        this.post("/product/:pid", [accessRolesEnum.USER], passportStrategiesEnum.JWT, this.addProdToCart)
-        this.delete("/:cid/product/:pid",[accessRolesEnum.USER], passportStrategiesEnum.JWT, this.deleteProdToCart)
-        this.delete("/:cid",[accessRolesEnum.USER], passportStrategiesEnum.JWT, this.emptyCart)
-        this.put("/:cid",[accessRolesEnum.USER], passportStrategiesEnum.JWT, this.updateCartArray)
-        this.put("/:cid/product/:pid", [accessRolesEnum.USER], passportStrategiesEnum.JWT, this.updateQuantiyToProduct)
+        this.post("/", [accessRolesEnum.USER], passportStrategiesEnum.JWT, this.createOne)//
+        this.get("/:cid",[accessRolesEnum.USER], passportStrategiesEnum.JWT, this.cartbyid)//
+        this.post("/product/:pid", [accessRolesEnum.USER], passportStrategiesEnum.JWT, this.addProdToCart)//
+        this.post("/removeQuantity/:pid", [accessRolesEnum.USER], passportStrategiesEnum.JWT, this.removeQuantiyToProduct)//
+        this.delete("/remove/:pid",[accessRolesEnum.USER], passportStrategiesEnum.JWT, this.deleteProdToCart)//
+        this.delete("/empty/:cid",[accessRolesEnum.USER], passportStrategiesEnum.JWT, this.emptyCart)//
+        /* this.put("/:cid",[accessRolesEnum.USER], passportStrategiesEnum.JWT, this.updateCartArray)
+        this.put("/:cid/product/:pid", [accessRolesEnum.USER], passportStrategiesEnum.JWT, this.updateQuantiyToProduct) */
     }
 
 
@@ -80,25 +81,52 @@ export default class CartRouter extends Router {
             res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
         } 
     }
-
-    async deleteProdToCart (req, res){
-        const {cid} = req.params
-        const {pid} = req.params
+    async removeQuantiyToProduct (req,res){
         try {
-            const cartbyid = await cartManager.getCartsByID(cid)
+            const user = req.user
+            const cid = user.cart.id;
+            const {pid} = req.params
+            const cartbyid = await this.cartManager.getCartsByID(cid)
             if(!cartbyid){
                 return res.status(400).send({status: "error", message: "no se encontro el carrito"})
             } 
-            const indexProduct = cartbyid.productsCart.findIndex(p => p.productID.equals(pid));
-            if(indexProduct === -1){
-                return res.status(400).send({status: "error", message: "no se encontro el producto"})
+            const productToUpdate = cartbyid.productsCart.find(p => p.productID.equals(pid));
+            if(productToUpdate.quantity <= 1){
+                const removeProduct = await this.cartManager.deleteCartProduct(cid,pid)
+                return res.send({status: "success", message: " Producto eliminado del carrito"})
+            }else{
+                const removeQuantiy = await this.cartManager.removeQuantiyToProduct(cid,pid)
+                return res.send({status: "success", message: " Cantidades del producto Actualizadas"})
             }
-            const deleteProduct = await cartManager.deleteCartProduct(cid,pid)
-            res.send({status: "success", message: `Producto eliminado del carrito ${cid}`}) 
         } catch (error) {
             console.error(error);
             res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
-        } 
+        }
+        
+        
+    }
+
+    async deleteProdToCart (req,res){
+        try {
+            const user = req.user
+            const cid = user.cart.id;
+            const {pid} = req.params
+            const cartbyid = await this.cartManager.getCartsByID(cid)
+            if(!cartbyid){
+                return res.status(400).send({status: "error", message: "no se encontro el carrito"})
+            } 
+            const productToUpdate = cartbyid.productsCart.find(p => p.productID.equals(pid));
+            if(productToUpdate){
+                const removeProduct = await this.cartManager.deleteCartProduct(cid,pid)
+                return res.send({status: "success", message: " Producto eliminado del carrito"})
+            }else{
+                return res.status(400).send({status: "error", message: " No se encontro el producto"})
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+        }
+         
     }
     async emptyCart (req, res){
         const {cid} = req.params
@@ -115,7 +143,7 @@ export default class CartRouter extends Router {
         } 
     }
     
-    async updateCartArray (req, res){
+   /*  async updateCartArray (req, res){
         const {cid} = req.params
         const products = req.body
         try {
@@ -157,7 +185,7 @@ export default class CartRouter extends Router {
             console.error(error);
             res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
         } 
-    }
+    } */
     
 
 }
