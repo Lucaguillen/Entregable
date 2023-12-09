@@ -1,6 +1,6 @@
 <div>
     <h1>Carrito de {{user.first_name}}!</h1>
-    <button onclick="emptyCart('{{user.cart.id}}')">Vaciar Carrito</button>
+    <button onclick="emptyCart('{{user.cart.id._id}}')">Vaciar Carrito</button>
 
     {{#each cart.productsCart}} 
         <p>Titulo: {{this.productID.title}}</p> 

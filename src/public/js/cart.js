@@ -5,6 +5,7 @@ const socket = io();
 
 const emptyCart = (_id) =>{
     const cid = _id; 
+
     fetch(`/api/carts/empty/${cid}`, {
         method: 'DELETE',
     })

@@ -1,5 +1,5 @@
 import express from "express";
-import productsRouter from "./Routes/products.routes.js"
+import ProductsRouter from "./Routes/products.routes.js"
 import CartRouter from "./Routes/carts.routes.js"
 import handlebars from "express-handlebars"
 import { __dirname } from "./utils.js";
@@ -24,7 +24,7 @@ const cartManager = new CartManager()
 const cartRouter = new CartRouter()
 const sessionsRouter = new SessionsRouter()
 const viewsRouter = new ViewsRouter()
-
+const productsRouter = new ProductsRouter()
 
 const app = express();
 
@@ -56,7 +56,7 @@ initializePassport()
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use("/api/products", productsRouter);
+app.use("/api/products", productsRouter.getRouter());
 app.use("/api/carts", cartRouter.getRouter());
 app.use('/api/sessions', sessionsRouter.getRouter());
 app.use("/",viewsRouter.getRouter())

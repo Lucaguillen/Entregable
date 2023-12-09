@@ -1,4 +1,3 @@
-import fs from "fs";
 import { __dirname } from "../../utils.js";
 import { cartsModel } from "./models/carts.model.js";
 import UsersManager from "./usersManager.js";
