@@ -3,13 +3,13 @@ import ProductsRouter from "./Routes/products.routes.js"
 import CartRouter from "./Routes/carts.routes.js"
 import handlebars from "express-handlebars"
 import { __dirname } from "./utils.js";
-import ViewsRouter from "./Routes/views.router.js"
+import ViewsRouter from "./Routes/views.routes.js"
 import { Server } from "socket.io";
 import ProductManager from "./dao/dbManagers/products.manager.js"
 import mongoose from "mongoose";
-import MessageManager from "./dao/dbManagers/message.manager.js";
-import CartManager from "./dao/dbManagers/cart.manager.js"
-import SessionsRouter from "./Routes/sessions.routes.js"
+import MessageManager from "./dao/memoryManager/message.manager.js";
+import CartManager from "./dao/memoryManager/cart.manager.js"
+import UsersRouter from "./Routes/users.routes.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import { initializePassport } from "./config/passport.config.js";
@@ -22,7 +22,7 @@ const messageManager = new MessageManager()
 const cartManager = new CartManager()
 
 const cartRouter = new CartRouter()
-const sessionsRouter = new SessionsRouter()
+const usersRouter = new UsersRouter()
 const viewsRouter = new ViewsRouter()
 const productsRouter = new ProductsRouter()
 
@@ -58,7 +58,7 @@ app.use(passport.session())
 
 app.use("/api/products", productsRouter.getRouter());
 app.use("/api/carts", cartRouter.getRouter());
-app.use('/api/sessions', sessionsRouter.getRouter());
+app.use('/api/sessions', usersRouter.getRouter());
 app.use("/",viewsRouter.getRouter())
 
 //handlebars

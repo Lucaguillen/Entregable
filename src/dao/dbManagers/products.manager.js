@@ -1,4 +1,3 @@
-import fs from "fs";
 import { productsModel } from "./models/products.model.js";
 import { __dirname }  from "../../utils.js";
 
@@ -31,6 +30,16 @@ export default class ProductManager {
         const result = await productsModel.updateOne({_id : id}, productToUpdate)
         return result
     }
+    productPaginate = async (page) =>{
+        const result = await productsModel.paginate({},{limit: 4, page, lean: true})
+        return result
+    }
+    productPaginate2 = async (filter, options) =>{
+        const result = await productsModel.paginate(filter, options)
+        return result
+    }
+
+    
     
 } 
 

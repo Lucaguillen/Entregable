@@ -1,4 +1,4 @@
-import CartManager from "../dao/dbManagers/cart.manager.js"
+import CartManager from "../dao/memoryManager/cart.manager.js"
 const cartManager = new CartManager()
 
 const createNewCart = async () =>{

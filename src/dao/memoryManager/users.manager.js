@@ -1,5 +1,5 @@
 import { __dirname } from "../../utils.js";
-import usersModel from "./models/users.model.js";
+import usersModel from "../dbManagers/models/users.model.js";
 
 export default class usersManager {
     constructor(path) {

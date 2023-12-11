@@ -1,5 +1,3 @@
-import CartManager  from "../dao/dbManagers/cart.manager.js";
-const cartManager = new CartManager()
 import {addProductCart, addQuantiyToProduct, createNewCart, existProduct, getCartProducts, getCartsByID, removeQuantiyService, removeProduct, emptyCartService} from "../services/cart.services.js"
 
 

@@ -1,4 +1,4 @@
-import { messageModel } from "./models/message.model.js";
+import { messageModel } from "../dbManagers/models/message.model.js";
 import { __dirname }  from "../../utils.js";
 
 
