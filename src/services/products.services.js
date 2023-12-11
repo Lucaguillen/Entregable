@@ -1,5 +1,5 @@
-import ProductManager from "../dao/dbManagers/products.manager.js";
-import { productsModel } from "../dao/dbManagers/models/products.model.js"; //
+import ProductManager from "../dao/memoryManager/products.manager.js";
+
 const productManager = new ProductManager()
 
 const deleteProductService = async (id)=>{

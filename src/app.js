@@ -5,7 +5,7 @@ import handlebars from "express-handlebars"
 import { __dirname } from "./utils.js";
 import ViewsRouter from "./Routes/views.routes.js"
 import { Server } from "socket.io";
-import ProductManager from "./dao/dbManagers/products.manager.js"
+import ProductManager from "./dao/memoryManager/products.manager.js"
 import mongoose from "mongoose";
 import MessageManager from "./dao/memoryManager/message.manager.js";
 import CartManager from "./dao/memoryManager/cart.manager.js"

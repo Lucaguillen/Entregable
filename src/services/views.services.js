@@ -1,5 +1,5 @@
 import CartManager from "../dao/memoryManager/cart.manager.js"
-import ProductManager from "../dao/dbManagers/products.manager.js"
+import ProductManager from "../dao/memoryManager/products.manager.js"
 const productManager = new ProductManager()
 const cartManager = new CartManager()
 
