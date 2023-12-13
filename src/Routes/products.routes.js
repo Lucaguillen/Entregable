@@ -11,11 +11,11 @@ export default class ProductsRouter extends Router{
 
     init(){
 
-        this.get("/", [accessRolesEnum.PUBLIC], passportStrategiesEnum.JWT, getAll)
-        this.get("/:id", [accessRolesEnum.PUBLIC], passportStrategiesEnum.JWT, getByID)
-        this.post("/", [accessRolesEnum.PUBLIC], passportStrategiesEnum.JWT, createProduct)
-        this.put("/:id", [accessRolesEnum.PUBLIC], passportStrategiesEnum.JWT, updateProduct)
-        this.delete("/:id", [accessRolesEnum.PUBLIC], passportStrategiesEnum.JWT, deleteProduct)
+        this.get("/", [accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, getAll)
+        this.get("/:id", [accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, getByID)
+        this.post("/", [accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, createProduct)
+        this.put("/:id", [accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, updateProduct)
+        this.delete("/:id", [accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, deleteProduct)
     }
 
 }

@@ -3,6 +3,7 @@ import usersManager from "../dao/memoryManager/users.manager.js";
 import CartManager from "../dao/memoryManager/cart.manager.js"
 const cartManager = new CartManager()
 const usermanager = new usersManager()
+import config from "../../config.js";
 
 const findByEmailService = async  (email) => {
     const user = await usermanager.findByEmail(email)
@@ -14,7 +15,7 @@ const registerService  = async  (user, email, password) =>{
     let passwordHashed = createHash(password)
     user.password = passwordHashed
     
-    if(email === "adminCoder@coder.com" && password === "adminCod3r123"){
+    if(email === config.adminEmail && password === config.adminPass){
         user.role = "admin"
     }
     

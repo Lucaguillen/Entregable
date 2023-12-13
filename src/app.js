@@ -15,6 +15,7 @@ import MongoStore from "connect-mongo";
 import { initializePassport } from "./config/passport.config.js";
 import passport from "passport";
 import cookieParser from "cookie-parser";
+import config from "../config.js";
 
 
 const productManager = new ProductManager();
@@ -28,9 +29,11 @@ const productsRouter = new ProductsRouter()
 
 const app = express();
 
+
+
 // DB CONNECTION
 try {
-    await mongoose.connect("mongodb+srv://lucaguillen:Lucamoizo2@coderlucaguillen.ivruvl3.mongodb.net/ecommerce?retryWrites=true&w=majority")
+    await mongoose.connect(config.mongoUrl)
     console.log("db connected")
 } catch (error) {
     console.log(error.message)

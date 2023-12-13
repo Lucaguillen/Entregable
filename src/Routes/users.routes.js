@@ -9,7 +9,7 @@ export default class UsersRouter extends Router{
     }
     init() {
 
-        this.get("/current", [accessRolesEnum.USER], passportStrategiesEnum.JWT ,current)
+        this.get("/current", [accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT ,current)
 
 
         this.post("/login", [accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING ,login)
