@@ -7,8 +7,8 @@ const deleteProductService = async (id)=>{
     return result
 }
 
-const getProductsService = async () =>{
-    const result = await productManager.getProducts()
+const getProductsService = async (id) =>{
+    const result = await productManager.getProducts(id)
     return result
 }
 
