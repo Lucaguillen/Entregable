@@ -3,9 +3,19 @@ import { usersManager, CartManager} from "../dao/factory.js"
 const cartManager = new CartManager()
 const usermanager = new usersManager()
 import config from "../../config.js";
+import UserRepository from "../repositories/users.repositories.js";
+import CartRepository from "../repositories/carts.repositories.js";
+
+const userRepository = new UserRepository(usermanager)
+const cartRepository = new CartRepository(cartManager)
 
 const findByEmailService = async  (email) => {
-    const user = await usermanager.findByEmail(email)
+    const user = await userRepository.findByEmail(email)
+    return user
+}
+
+const nonSensitiveService = async (email) =>{
+    const user = await userRepository.nonSensitiveUserInfo(email)
     return user
 }
 
@@ -18,13 +28,14 @@ const registerService  = async  (user, email, password) =>{
         user.role = "admin"
     }
     
-    const result = await usermanager.create(user);
+    const result = await userRepository.create(user)
 
     const newCart = {productsCart: []};
-    const createCart = await cartManager.createCart(newCart)
-    const setCart = await usermanager.setCartToUser(createCart, result._id)
+    const createCart = await cartRepository.createCart(newCart)
+    const setCart = await userRepository.setCartToUser(createCart, result._id)
 }
 export{
     findByEmailService,
-    registerService
+    registerService,
+    nonSensitiveService
 }

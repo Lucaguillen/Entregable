@@ -1,5 +1,5 @@
 import {createHash, generateToken, isValidPassword} from "../utils.js"
-import { findByEmailService, registerService } from "../services/user.services.js"
+import { findByEmailService, registerService, nonSensitiveService } from "../services/user.services.js"
 
 
 //GITHUB
@@ -23,7 +23,7 @@ const githubCallback = async (req,res)=>{
 const current = async  (req, res) => {
     try {
         const {email} = req.user
-        const user = await findByEmailService(email)
+        const user = await nonSensitiveService(email)
         return res.sendSuccess(user)
     } catch (error) {
         console.error('Error al realizar la operación de logout:', error);

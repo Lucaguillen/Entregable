@@ -17,7 +17,7 @@ export default class CartManager {
         return carts
     } 
 
-    createCart = async (newCart, email) =>{
+    createCart = async (newCart) =>{
         try {
             const cartAdded = await cartsModel.create(newCart)
             return cartAdded
