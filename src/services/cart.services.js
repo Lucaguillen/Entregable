@@ -1,5 +1,7 @@
-import CartManager from "../dao/memoryManager/cart.manager.js"
+import { CartManager } from "../dao/factory.js";
 const cartManager = new CartManager()
+
+
 
 const createNewCart = async () =>{
     const newCart = {productsCart: []};

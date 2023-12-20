@@ -1,6 +1,5 @@
 import {createHash, generateToken, isValidPassword} from "../utils.js"
-import usersManager from "../dao/memoryManager/users.manager.js";
-import CartManager from "../dao/memoryManager/cart.manager.js"
+import { usersManager, CartManager} from "../dao/factory.js"
 const cartManager = new CartManager()
 const usermanager = new usersManager()
 import config from "../../config.js";

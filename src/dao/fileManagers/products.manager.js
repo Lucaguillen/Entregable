@@ -1,117 +1,104 @@
-/* import fs from "fs";
-import __dirname from "../../utils.js";
+import fs from "fs";
+import { __dirname }  from "../../utils.js";
+import { v4 as uuidv4 } from "uuid";
 
 
- 
 export default class ProductManager {
-    constructor(path) {
-        this.path = path;
+    constructor() {
+        this.path = `${__dirname}/dao/fileManagers/files/Productos.json`;
     }
     getProducts = async () => {
-        try {
-            if (fs.existsSync(this.path)) {
-                const data = await fs.promises.readFile(this.path, 'utf-8');
-                const products = JSON.parse(data);
-                return products;
-            } else {
-                return [];
-            }
-        } catch (error) {
-            console.log(error);
+        if (fs.existsSync(this.path)) {
+            const data = await fs.promises.readFile(this.path, 'utf-8');
+            const products = JSON.parse(data);
+            return products;
+        } else {
+            return [];
         }
-    }  
-    getProductsById= async (id)=> {
-        try {
-            const products = await this.getProducts()
-            const productsFiltered = products.find((p)=> p.id === id);
-            if(!productsFiltered){
-                return { status: "error", error: 'Producto no encontrado' }
-            }else{
-                return productsFiltered;
-            }
-            
-        } catch (error) {
-            console.log(error)
-        }
+    } 
+    addProduct = async (product) => {
+        const data = await fs.promises.readFile(this.path, 'utf-8');
+        const products = JSON.parse(data);
+        const newProductId = uuidv4();
+        product._id = newProductId;
+        products.push(product);
+        await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2), 'utf-8');
+        return product;
+    }
+    getProductsById = async (id) => {
+        const data = await fs.promises.readFile(this.path, 'utf-8');
+        const products = JSON.parse(data);
+        const product = products.filter((p) => p._id === id)[0];
+        return product || null;
     }
     deleteProduct = async (id) => {
-        try { 
-            let products = await this.getProducts();
-            const productToDelete = products.find((product) => product.id === id);
-            if (!productToDelete) {
-                return {status: "error", message: "no se encontro el producto"}
-            }else{
-                const updatedProducts = products.filter((product) => product.id !== id);
-                await fs.promises.writeFile(this.path, JSON.stringify(updatedProducts, null, '\t'));
-                return {status: "success", message: "producto eliminado"}
-            }
-        } catch (error) {
-            console.log(error)
-        }
+        const data = await fs.promises.readFile(this.path, 'utf-8');
+        const products = JSON.parse(data);
+        const indexToDelete = products.findIndex((p) => p._id === id);
+        const deletedProduct = products.splice(indexToDelete, 1)[0];
+        await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2), 'utf-8');
+        return deletedProduct;
     }
-    addProduct = async (product) => {
-        try {
-            const products = await this.getProducts()
-            if (products.some(p => p.code === product.code)){
-                return { status: "error", error: "ya existe un producto con ese codigo"}
-            }else if (!product.title ||!product.description ||!product.code ||!product.price
-                ||!product.stock ||!product.category){
-                return { status: "error", error: "valores incompletos"}
-            }
-            
-            if ((isNaN(product.price) || product.price <= 0) || (isNaN(product.stock) || product.stock <= 0)) {
-                return { status: "error", error: "El precio y el stock deben ser números válidos y mayores que cero" };
-            }
-            
+   
+    updateProduct = async (productToUpdate,id) =>{
+        const data = await fs.promises.readFile(this.path, 'utf-8');
+        const products = JSON.parse(data);
+        const index = products.findIndex(p => p._id === id)
+        const productComplete = { "_id": id, ...productToUpdate };
+        products[index] = productComplete
+        const result = await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'));
+        return result
+    }  
 
-            if (product.status !== "false") {
-                product.status = true;
-            }else{
-                product.status = false;
-            }
+    productPaginate2 = async (filter, options) => {
+        const data = await fs.promises.readFile(this.path, 'utf-8');
+        const products = JSON.parse(data);
+
+       
+        const filteredProducts = products.filter(product => {
             
-            if(products.length === 0){
-                product.id = 1;
-            }else{
-                product.id = products[products.length -1].id + 1;
-            }
-            products.push(product);
-            await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'));
-            return {status: "success", message: "producto creaado"}
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    updateProduct = async (product,pid) =>{
-        try {
-            const products = await this.getProducts()
-            if (!product.title ||!product.description ||!product.code ||!product.price
-                ||!product.stock ||!product.category){
-                return { status: "error", error: "valores incompletos"}}
-            if (product.id){
-                return { status: "error", error: "no se puede modificar el ID"}
-            }
-            if (products.some(p => p.code === product.code)){
-                return { status: "error", error: "ya existe un producto con ese codigo"}
-            }     
-            if (!product.hasOwnProperty('status')) {
-                product.status = true;
-            }
-            const index = products.findIndex(p => p.id === pid)
-            if (index !== -1){
-                const productComplete = {id: pid,...product}
-                products[index] = productComplete
-                await fs.promises.writeFile(`${__dirname}/managers/files/Productos.json`, JSON.stringify(products, null, '\t'));
-                return {status: "success", message: "producto actualizado"}
-            }else{
-                return {status: "error", message: "no se encontro el producto"}
-            }
-        } catch (error) {
-            console.error(error)
-        }
-    }
+            const categoryMatch =
+                filter.$or[0].category.$regex && product.category.includes(filter.$or[0].category.$regex);
+
+            const stockMatch =
+                filter.$or[1].stock.$gte && product.stock >= Number(filter.$or[1].stock.$gte);
+
+            return categoryMatch || stockMatch;
+        });
+
+        
+        const startIndex = (options.page - 1) * options.limit;
+        const endIndex = startIndex + options.limit;
+        const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+
+        
+        return {
+            docs: paginatedProducts,
+            totalDocs: filteredProducts.length,
+            limit: options.limit,
+            page: options.page,
+            totalPages: Math.ceil(filteredProducts.length / options.limit),
+        };
+    };
     
-}  */
+    productPaginate = async (page) => {
+        const data = await fs.promises.readFile(this.path, 'utf-8');
+        const products = JSON.parse(data);
+        const limit = 4;
+        const startIndex = (page - 1) * limit;
+        const endIndex = startIndex + limit;
+        const paginatedProducts = products.slice(startIndex, endIndex);
+        return {
+            docs: paginatedProducts,
+            totalDocs: products.length,
+            limit,
+            page,
+            totalPages: Math.ceil(products.length / limit),
+        };
+    };
+    
+} 
+
 
 
 

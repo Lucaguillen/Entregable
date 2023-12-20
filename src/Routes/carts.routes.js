@@ -8,12 +8,12 @@ export default class CartRouter extends Router {
         super()
     }
     init(){
-        this.post("/", [accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, createOne)//
-        this.get("/:cid",[accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, cartbyid)//
-        this.post("/product/:pid", [accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, addProdToCart)//
-        this.post("/removeQuantity/:pid", [accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, removeQuantiyToProduct)//
-        this.delete("/remove/:pid",[accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, deleteProdToCart)//
-        this.delete("/empty/:cid",[accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, emptyCart)//
+        this.post("/", [accessRolesEnum.USER], passportStrategiesEnum.JWT, createOne)//
+        this.get("/:cid",[accessRolesEnum.USER], passportStrategiesEnum.JWT, cartbyid)//
+        this.post("/product/:pid", [accessRolesEnum.USER], passportStrategiesEnum.JWT, addProdToCart)//
+        this.post("/removeQuantity/:pid", [accessRolesEnum.USER], passportStrategiesEnum.JWT, removeQuantiyToProduct)//
+        this.delete("/remove/:pid",[accessRolesEnum.USER], passportStrategiesEnum.JWT, deleteProdToCart)//
+        this.delete("/empty/:cid",[accessRolesEnum.USER], passportStrategiesEnum.JWT, emptyCart)//
 
     }  
 }

@@ -19,7 +19,7 @@ export default class ViewsRouter extends Router{
 
         this.get("/products",[accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, getproducts)
 
-        this.get("/chat", [accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, async (req, res)=>{
+        this.get("/chat", [accessRolesEnum.USER], passportStrategiesEnum.JWT, async (req, res)=>{
             return res.render("chat")
         })
 

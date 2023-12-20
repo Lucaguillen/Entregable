@@ -1,4 +1,4 @@
-import ProductManager from "../dao/memoryManager/products.manager.js";
+import { ProductManager } from "../dao/factory.js"
 
 const productManager = new ProductManager()
 

@@ -5,18 +5,13 @@ import handlebars from "express-handlebars"
 import { __dirname } from "./utils.js";
 import ViewsRouter from "./Routes/views.routes.js"
 import { Server } from "socket.io";
-import ProductManager from "./dao/memoryManager/products.manager.js"
-import mongoose from "mongoose";
-import MessageManager from "./dao/memoryManager/message.manager.js";
-import CartManager from "./dao/memoryManager/cart.manager.js"
 import UsersRouter from "./Routes/users.routes.js";
 import session from "express-session";
-import MongoStore from "connect-mongo";
 import { initializePassport } from "./config/passport.config.js";
 import passport from "passport";
 import cookieParser from "cookie-parser";
 import config from "../config.js";
-
+import { CartManager, MessageManager, ProductManager } from "./dao/factory.js";
 
 const productManager = new ProductManager();
 const messageManager = new MessageManager()
@@ -32,12 +27,12 @@ const app = express();
 
 
 // DB CONNECTION
-try {
+/* try {
     await mongoose.connect(config.mongoUrl)
     console.log("db connected")
 } catch (error) {
     console.log(error.message)
-}
+} */
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}));
