@@ -1,25 +1,77 @@
 import { CartManager } from "../dao/factory.js";
 const cartManager = new CartManager()
+import CartRepository from "../repositories/carts.repositories.js";
+const cartRepository = new CartRepository(cartManager)
+import { newTiketService } from "../services/tiket.services.js"
+import { updateProductService } from "./products.services.js";
+
+
+const purchaseService = async (cid) => {
+    const cart = await cartRepository.getCartProducts(cid);
+    const cartUserOwner = await cartRepository.getCartsByID(cid)
+    const email = cartUserOwner.userId.email
+
+    const productsOnStock = cart.productsCart.filter(cartItem => {
+        const product = cartItem.productID;
+        const quantityInCart = cartItem.quantity;
+        return quantityInCart <= product.stock;
+    });
+
+    const productsOffStock = cart.productsCart.filter(cartItem => {
+        const product = cartItem.productID;
+        const quantityInCart = cartItem.quantity;
+        return quantityInCart > product.stock;
+    });
+
+    for (const cartItem of productsOnStock) {
+        const product = cartItem.productID;
+        const quantityInCart = cartItem.quantity;
+
+        const newStock = product.stock - quantityInCart;
+
+        await updateProductService({ stock: newStock }, product._id);
+    }
+
+    if(productsOnStock.length !== 0 && productsOffStock.length === 0){
+
+        await cartRepository.emptyCart(cid)
+        return await newTiketService(productsOnStock,email)
+
+    }else if (productsOnStock.length === 0 && productsOffStock.length !== 0){
+        return productsOffStock
+    }else if (productsOnStock.length !== 0 && productsOffStock.length !== 0){
+        await cartRepository.emptyCart(cid)
+        await cartRepository.updateCartArray(cid, productsOffStock)
+        return await newTiketService(productsOnStock,email)
+        
+    }
+
+};
+
+const updateCartArrayService = async (cid, products)=>{
+    const newCartArray = await cartRepository.updateCartArray(cid, products)
+    return newCartArray
+}
 
 
 
 const createNewCart = async () =>{
     const newCart = {productsCart: []};
-    await cartManager.createCart(newCart)
+    await cartRepository.createCart(newCart)
 }
 
 const getCartsByID = async (cid) =>{
-    const cart = await cartManager.getCartsByID(cid)
+    const cart = await cartRepository.getCartsByID(cid)
     return cart
 }
 
 const getCartProducts = async (cid) =>{
-    const cart = await cartManager.getCartProducts(cid)
+    const cart = await cartRepository.getCartProducts(cid)
     return cart
 }
 
 const existProduct = async (pid,cid) =>{
-    const cartbyid = await cartManager.getCartsByID(cid)
+    const cartbyid = await cartRepository.getCartsByID(cid)
     const product = {
         productID: pid,
         quantity: 1,
@@ -28,8 +80,10 @@ const existProduct = async (pid,cid) =>{
     return existProduct
 }
 
+
+
 const addQuantiyToProduct = async (cid, product) => {
-    const addQuantiy = await cartManager.addQuantiyToProduct(cid,product)
+    const addQuantiy = await cartRepository.addQuantiyToProduct(cid,product)
 }
 
 const addProductCart = async (pid,cid) =>{
@@ -37,27 +91,27 @@ const addProductCart = async (pid,cid) =>{
         productID: pid,
         quantity: 1,
     }
-    const addProduct = await cartManager.addProductCart(cid,product)
+    const addProduct = await cartRepository.addProductCart(cid,product)
 
 }
 const removeQuantiyService = async (cid, pid) =>{
-    const cartbyid = await cartManager.getCartsByID(cid)
+    const cartbyid = await cartRepository.getCartsByID(cid)
     const productToUpdate = cartbyid.productsCart.find(p => p.productID.equals(pid));
     if(productToUpdate.quantity <= 1){
-        const removeProduct = await cartManager.deleteCartProduct(cid,pid)
+        const removeProduct = await cartRepository.deleteCartProduct(cid,pid)
         return removeProduct
     }else{
-        const removeQuantiy = await cartManager.removeQuantiyToProduct(cid,pid)
+        const removeQuantiy = await cartRepository.removeQuantiyToProduct(cid,pid)
         return removeQuantiy
     }
 }
 
 const removeProduct = async (cid, pid) => {
-    const removeProduct = await cartManager.deleteCartProduct(cid,pid)
+    const removeProduct = await cartRepository.deleteCartProduct(cid,pid)
 }
 
 const emptyCartService = async (cid) => {
-    const deleteProduct = await cartManager.emptyCart(cid)
+    const deleteProduct = await cartRepository.emptyCart(cid)
 }
 
 export{
@@ -69,7 +123,9 @@ export{
     addProductCart,
     removeQuantiyService,
     removeProduct,
-    emptyCartService
+    emptyCartService,
+    purchaseService,
+    updateCartArrayService
 }
 
 

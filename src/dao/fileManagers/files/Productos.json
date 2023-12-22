@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "title": "Producto 20",
+    "description": "Descripción del Producto 20",
+    "code": 1423,
+    "price": 950,
+    "stock": 11,
+    "category": "Categoría B",
+    "thumbnails": [],
+    "status": true,
+    "_id": "1e87cc85-35c5-43fa-a363-fdeea7c3c999"
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "first_name": "s",
+    "last_name": "s",
+    "email": "s",
+    "age": "1",
+    "password": "$2b$10$MUKamE9W7CnyLfbfdalYV.5.sfm6BdLeKswfzmmJKkpOW9eYOIeAW",
+    "role": "user",
+    "_id": "22ee722c-0e93-43ec-9a20-a3e8a80fd0b9",
+    "cart": {
+      "id": {
+        "productsCart": [],
+        "userId": "22ee722c-0e93-43ec-9a20-a3e8a80fd0b9",
+        "_id": "754289bc-a65d-4a0d-bbf5-10c8fe7eeb18"
+      }
+    }
+  }
+]

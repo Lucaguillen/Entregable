@@ -1,28 +1,31 @@
 import { ProductManager } from "../dao/factory.js"
-
+import ProductRepository from "../repositories/products.repositories.js"
 const productManager = new ProductManager()
+const productRepository = new ProductRepository(productManager)
+
+
 
 const deleteProductService = async (id)=>{
-    const result = await productManager.deleteProduct(id)
+    const result = await productRepository.deleteProduct(id)
     return result
 }
 
 const getProductsService = async (id) =>{
-    const result = await productManager.getProducts(id)
+    const result = await productRepository.getProducts(id)
     return result
 }
 
 const getProductsByIdService = async (id) =>{
-    const result = await productManager.getProductsById(id)
+    const result = await productRepository.getProductsById(id)
     return result
 }
 
 const updateProductService = async (productToUpdate,id) =>{
-    const result = await productManager.updateProduct(productToUpdate, id )
+    const result = await productRepository.updateProduct(productToUpdate, id )
     return result
 }
 const addProductService = async (product) =>{
-    const result = productManager.addProduct(product)
+    const result = await productRepository.addProduct(product)
     return result
 }
 
@@ -44,7 +47,7 @@ const getAllPaginateService = async  (limit, page, sort, query, queryvalue) => {
         options.sort = { price: Number(sort) };
     }
 
-    const products = await productManager.productPaginate2(filter, options)
+    const products = await productRepository.productPaginate2(filter, options)
     return products
     
 }

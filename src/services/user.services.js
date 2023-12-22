@@ -26,11 +26,17 @@ const registerService  = async  (user, email, password) =>{
     
     if(email === config.adminEmail && password === config.adminPass){
         user.role = "admin"
+    }else{
+        user.role = "user"
     }
     
     const result = await userRepository.create(user)
 
-    const newCart = {productsCart: []};
+    const newCart = {
+        productsCart: [],
+        userId: result._id
+    };
+    
     const createCart = await cartRepository.createCart(newCart)
     const setCart = await userRepository.setCartToUser(createCart, result._id)
 }

@@ -40,16 +40,24 @@ export default class ProductManager {
         return deletedProduct;
     }
    
-    updateProduct = async (productToUpdate,id) =>{
+    updateProduct = async (productToUpdate, id) => {
         const data = await fs.promises.readFile(this.path, 'utf-8');
         const products = JSON.parse(data);
-        const index = products.findIndex(p => p._id === id)
-        const productComplete = { "_id": id, ...productToUpdate };
-        products[index] = productComplete
-        const result = await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'));
-        return result
-    }  
+        const index = products.findIndex(p => p._id === id);
 
+        if (index !== -1) {
+            
+            Object.assign(products[index], productToUpdate, { "_id": id });
+
+            
+            const result = await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'));
+            return result;
+        } else {
+            console.error('Producto no encontrado');
+            return null;
+        }
+    };
+    
     productPaginate2 = async (filter, options) => {
         const data = await fs.promises.readFile(this.path, 'utf-8');
         const products = JSON.parse(data);

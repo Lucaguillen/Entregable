@@ -23,6 +23,7 @@ const githubCallback = async (req,res)=>{
 const current = async  (req, res) => {
     try {
         const {email} = req.user
+        
         const user = await nonSensitiveService(email)
         return res.sendSuccess(user)
     } catch (error) {

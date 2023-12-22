@@ -1,4 +1,5 @@
 import { __dirname } from "../../utils.js";
+import { cartsModel } from "../dbManagers/models/carts.model.js";
 import usersModel from "../dbManagers/models/users.model.js";
 
 export default class usersManager {

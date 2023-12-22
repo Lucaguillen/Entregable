@@ -13,18 +13,18 @@ export default class CartManager {
         return carts
     }  
     getCartsByID = async (cid) => {
-        const carts = await cartsModel.findById(cid)
+        const carts = await cartsModel.findOne({ _id: cid })
+        .populate({
+            path: 'userId',
+            model: 'users'
+        })
+        .lean();
         return carts
     } 
 
     createCart = async (newCart) =>{
-        try {
-            const cartAdded = await cartsModel.create(newCart)
-            return cartAdded
-            
-        } catch (error) {
-            console.error(error.message);
-        }
+        const cartAdded = await cartsModel.create(newCart)
+        return cartAdded
     }
     getCartProducts = async (cid)=>{
         const cart = await cartsModel

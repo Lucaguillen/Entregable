@@ -1,5 +1,19 @@
-import {addProductCart, addQuantiyToProduct, createNewCart, existProduct, getCartProducts, getCartsByID, removeQuantiyService, removeProduct, emptyCartService} from "../services/cart.services.js"
+import {addProductCart, addQuantiyToProduct, createNewCart, existProduct, getCartProducts, getCartsByID, removeQuantiyService, removeProduct, emptyCartService, purchaseService, updateCartArrayService} from "../services/cart.services.js"
 
+const purchase = async (req, res) =>{
+    try {
+        const {cid} = req.params
+        const cartbyid = await getCartsByID(cid)
+        if(!cartbyid){
+            return res.status(400).send({status: "error", message: "no se encontro el carrito"})
+        }
+        const purchase = await purchaseService(cid)
+        res.send({status: "success", payload: purchase})
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+    }
+}
 
 const createOne = async  (req,res) => {
     try {
@@ -100,11 +114,28 @@ const emptyCart = async (req, res) => {
     } 
 }
 
+const updateCartArray = async (req, res) =>{
+    const {cid} = req.params
+    try {
+        const cartbyid = await getCartsByID(cid)
+        if(!cartbyid){
+            return res.status(400).send({status: "error", message: "no se encontro el carrito"})
+        }
+        const updateArray = await updateCartArrayService(cid)
+        res.send({status: "success", message: `Productos del carrito actualizados`}) 
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+    }
+}
+
 export {
     createOne,
     cartbyid,
     addProdToCart,
     removeQuantiyToProduct,
     deleteProdToCart,
-    emptyCart
+    emptyCart,
+    purchase,
+    updateCartArray
 }

@@ -21,14 +21,14 @@ const updateProduct = async  (req, res)=>{
     const productToUpdate = req.body
     const existProduct = await getProductsByIdService(id)
 
-    if(!productToUpdate.title || !productToUpdate.description || !productToUpdate.code ||
+    /* if(!productToUpdate.title || !productToUpdate.description || !productToUpdate.code ||
          !productToUpdate.price || !productToUpdate.stock || !productToUpdate.category){
         return res.status(400).send({status: "error", message: "valores incompletos"})
     }
     
     if (products.some(p => p.code === productToUpdate.code)){
         return res.status(400).send({ status: "error", error: "ya existe un producto con ese codigo"})
-    } 
+    }  */
     if (!existProduct){
         return res.status(400).send({status: "error", error:"no se encontro ningun producto con ese ID"})
     }

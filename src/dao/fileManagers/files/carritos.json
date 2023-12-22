@@ -1,36 +1,12 @@
 [
-	{
-		"products": [
-			{
-				"id": 1,
-				"quantity": 7
-			},
-			{
-				"id": 2,
-				"quantity": 5
-			},
-			{
-				"id": 4,
-				"quantity": 2
-			}
-		],
-		"id": 1
-	},
-	{
-		"products": [
-			{
-				"id": 2,
-				"quantity": 2
-			},
-			{
-				"id": 5,
-				"quantity": 1
-			}
-		],
-		"id": 2
-	},
-	{
-		"products": [],
-		"id": 3
-	}
+  {
+    "productsCart": [
+      {
+        "productID": "1e87cc85-35c5-43fa-a363-fdeea7c3c999",
+        "quantity": 2
+      }
+    ],
+    "userId": "22ee722c-0e93-43ec-9a20-a3e8a80fd0b9",
+    "_id": "754289bc-a65d-4a0d-bbf5-10c8fe7eeb18"
+  }
 ]

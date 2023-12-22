@@ -9,7 +9,7 @@ export default class CartRepository {
         const carts = await this.CartDao.getCarts()
         return carts
     }
-    getCartsByID = async () =>{
+    getCartsByID = async (cid) =>{
         const cart = await this.CartDao.getCartsByID(cid)
         return cart
     }
