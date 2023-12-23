@@ -23,7 +23,7 @@ export default class ViewsRouter extends Router{
             return res.render("chat")
         })
 
-        this.get("/cart", [accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, getcart)
+        this.get("/cart", [accessRolesEnum.USER], passportStrategiesEnum.JWT, getcart)
 
         this.get('/', [accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING, async (req, res) => {
             return res.redirect('/login')
