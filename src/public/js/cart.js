@@ -1,7 +1,26 @@
 const socket = io();
 
 //cart
-
+const purchase = (_id) =>{
+    const cid = _id; 
+    
+    fetch(`/api/carts/${cid}/purchase`, {
+        method: 'POST',
+    })
+    .then(response => {
+        if (response.ok) {
+            
+            console.log(`El carrito con ID ${cid} genero un tiket de compra.`);
+        } else {
+            
+            console.error('Error al generar tiket de compra.');
+        }
+    })
+    .catch(error => {
+        console.error('Error de red al generar tiket de compra:', error);
+    });
+   
+}
 
 const emptyCart = (_id) =>{
     const cid = _id; 

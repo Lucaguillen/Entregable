@@ -1,6 +1,7 @@
 <div>
     <h1>Carrito de {{user.first_name}}!</h1>
     <button onclick="emptyCart('{{user.cart.id._id}}')">Vaciar Carrito</button>
+    <button><a href="http://localhost:8080/products">Volver a Productos</a></button>
 
     {{#each cart.productsCart}} 
         <p>Titulo: {{this.productID.title}}</p> 
@@ -14,7 +15,11 @@
         <button onclick="removeProduct('{{this.productID._id}}')">X</button>
     {{/each}}
 
-    <button onclick="">Finalizar Compra</button>
+    {{#if cart.productsCart.length}}
+        <button onclick="purchase('{{user.cart.id._id}}')">Finalizar Compra</button>
+    {{/if}}
+
+
 </div>
 
 
