@@ -12,6 +12,7 @@ import passport from "passport";
 import cookieParser from "cookie-parser";
 import config from "../config.js";
 import { CartManager, MessageManager, ProductManager } from "./dao/factory.js";
+import errorHandler from "./middlewares/errors/index.js"
 
 const productManager = new ProductManager();
 const messageManager = new MessageManager()
@@ -24,21 +25,8 @@ const productsRouter = new ProductsRouter()
 
 const app = express();
 
-
-
-// DB CONNECTION
-/* try {
-    await mongoose.connect(config.mongoUrl)
-    console.log("db connected")
-} catch (error) {
-    console.log(error.message)
-} */
-
 app.use(express.json())
 app.use(express.urlencoded({extended: true}));
-
-
-
 
 // sesionss
 
@@ -58,6 +46,8 @@ app.use("/api/products", productsRouter.getRouter());
 app.use("/api/carts", cartRouter.getRouter());
 app.use('/api/sessions', usersRouter.getRouter());
 app.use("/",viewsRouter.getRouter())
+
+app.use(errorHandler);
 
 //handlebars
 app.engine("handlebars", handlebars.engine())
@@ -93,12 +83,7 @@ socketServer.on('connection', async socket => {
     socket.on("addToCartBtn", async pid =>{
         const cart = await cartManager.getCartsByID("6544e501bef87d7997ccea14")
         console.log(cart)
-       /*  const product = {
-            productID: productIdSelected,
-            quantity: 1,
-        }
-        await cartManager.addProductCart(cid,product)
-        console.log({status: "success", message: `Nuevo producto agregado al carrito ${cid}`})  */
+       
     })
 
     

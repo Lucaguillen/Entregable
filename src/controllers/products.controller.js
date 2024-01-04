@@ -1,3 +1,5 @@
+import { EErrors } from "../config/enumns.js";
+import CustomErrors from "../middlewares/errors/CustomErrors.js";
 import { addProductService, deleteProductService, getAllPaginateService, getProductsByIdService, getProductsService, updateProductService } from "../services/products.services.js"
 
 
@@ -5,13 +7,25 @@ const deleteProduct = async  (req, res)=>{
     try {
         const {id} = req.params;
         const result = await deleteProductService(id)
-        if(!result) return res.status(404).send({status: "error", message:"Producto no encontrado"});
+        if(!result){
+            throw CustomErrors.createError({
+                name: "Producto no encontrado",
+                cause: "No se encuentra producto con esa ID",
+                message: "el producto que se intenta eliminar no se encuentra en la base de datos",
+                code: EErrors.PRODUCT_NOT_FOUND
+            })
+        }
+            
         const socketServer = req.app.get("socketio")
         socketServer.emit('showproducts', await getProductsService());
         return res.send(`El Producto con el id ${id} fue exitosamente eliminado`)
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+        throw CustomErrors.createError({
+            name: "Error en el Servidor",
+            cause: "Ocurrio un error en el servidor",
+            message: "Al intentar eliminar un producto ocurrio un error interno en el servidor",
+            code: EErrors.INTERNAL_SERVER_ERROR
+        })
     }
 }
 
@@ -21,16 +35,13 @@ const updateProduct = async  (req, res)=>{
     const productToUpdate = req.body
     const existProduct = await getProductsByIdService(id)
 
-    /* if(!productToUpdate.title || !productToUpdate.description || !productToUpdate.code ||
-         !productToUpdate.price || !productToUpdate.stock || !productToUpdate.category){
-        return res.status(400).send({status: "error", message: "valores incompletos"})
-    }
-    
-    if (products.some(p => p.code === productToUpdate.code)){
-        return res.status(400).send({ status: "error", error: "ya existe un producto con ese codigo"})
-    }  */
     if (!existProduct){
-        return res.status(400).send({status: "error", error:"no se encontro ningun producto con ese ID"})
+        throw CustomErrors.createError({
+            name: "Producto no encontrado",
+            cause: "No se encuentra producto con esa ID",
+            message: "el producto que se intenta actualizar no se encuentra en la base de datos",
+            code: EErrors.PRODUCT_NOT_FOUND
+        })
     }
     try {
         const result = await updateProductService(productToUpdate,id)
@@ -38,8 +49,12 @@ const updateProduct = async  (req, res)=>{
         socketServer.emit('showproducts', await getProductsService());
         return res.send(`El producto con el id ${id} fue exitosamente Actualizado`)
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+        throw CustomErrors.createError({
+            name: "Error en el Servidor",
+            cause: "Ocurrio un error en el servidor",
+            message: "Al intentar actualizar un producto ocurrio un error interno en el servidor",
+            code: EErrors.INTERNAL_SERVER_ERROR
+        })
     }
 }
 
@@ -48,16 +63,32 @@ const createProduct = async  (req, res) => {
     const {title, description, code, price, stock, category, thumbnails, status } = req.body
     
     if(!title || !description || !code || !price || !stock || ! category){
-        return res.status(400).send({status: "error", message: "valores incompletos"})
+        throw CustomErrors.createError({
+            name: "Valores incompletos",
+            cause: "Faltan valores a la hora de crear producto",
+            message: "El producto no pudo ser creado por falta de valores",
+            code: EErrors.INVALID_TYPE_ERROR
+        })
+
     }
     
     const allProducts = await getProductsService();
 
     
     if (allProducts.some(p => p.code === req.body.code)){
-        return { status: "error", error: "ya existe un producto con ese codigo"}
+        throw CustomErrors.createError({
+            name: "Producto existente",
+            cause: "Se intento registrar un producto ya existente",
+            message: "ya existe un producto con ese codigo",
+            code: EErrors.CONFLICT_ERROR
+        })
     }if ((isNaN(req.body.price) || req.body.price <= 0) || (isNaN(req.body.stock) || req.body.stock <= 0)) {
-        return { status: "error", error: "El precio y el stock deben ser números válidos y mayores que cero" };
+        throw CustomErrors.createError({
+            name: "Valores incorrectos",
+            cause: "Existen valores incorrectos a la hora de crear producto",
+            message: "El precio y el stock deben ser números válidos y mayores que cero",
+            code: EErrors.INVALID_TYPE_ERROR
+        })
     }
     
     if (req.body.status !== "false") {
@@ -72,8 +103,12 @@ const createProduct = async  (req, res) => {
         socketServer.emit('showproducts', await getProductsService());
         return res.send({status: "success", message: "producto creado"})
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+        throw CustomErrors.createError({
+            name: "Error en el Servidor",
+            cause: "Ocurrio un error en el servidor",
+            message: "Al intentar crear un producto ocurrio un error interno en el servidor",
+            code: EErrors.INTERNAL_SERVER_ERROR
+        })
     }
     
 }
@@ -85,8 +120,12 @@ const getByID = async  (req, res) => {
         if(!result) return res.status(404).send({status: "error", message:"Producto no encontrado"});
         res.send(result);
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+        throw CustomErrors.createError({
+            name: "Error en el Servidor",
+            cause: "Ocurrio un error en el servidor",
+            message: "Al intentar obtener un producto por su ID ocurrio un error interno en el servidor",
+            code: EErrors.INTERNAL_SERVER_ERROR
+        })
     }
     
 }
@@ -120,8 +159,12 @@ const getAll = async  (req, res) => {
 
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+        throw CustomErrors.createError({
+            name: "Error en el Servidor",
+            cause: "Ocurrio un error en el servidor",
+            message: "Al intentar obtener todos los productos paginados ocurrio un error interno en el servidor",
+            code: EErrors.INTERNAL_SERVER_ERROR
+        })
     }
     
 }

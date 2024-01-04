@@ -1,5 +1,7 @@
 import {createHash, generateToken, isValidPassword} from "../utils.js"
 import { findByEmailService, registerService, nonSensitiveService } from "../services/user.services.js"
+import CustomErrors from "../middlewares/errors/CustomErrors.js"
+import { EErrors } from "../config/enumns.js"
 
 
 //GITHUB
@@ -47,7 +49,12 @@ const login = async  (req,res)=>{
         const {email, password} = req.body
         const user = await findByEmailService(email)
         if (!user || !isValidPassword(password, user.password) ) {
-            return res.sendClientError("usuario no encontrado o contraseña incorrecta")
+            throw CustomErrors.createError({
+                name: "Error de Credenciales",
+                cause: "usuario no encontrado o contraseña incorrecta",
+                message: "Error al intentar iniciar sesion",
+                code: EErrors.CREDENTIALS_ERROR
+            })
         }
         delete user.password
         const accessToken = generateToken(user)
@@ -63,7 +70,13 @@ const register  = async  (req,res)=>{
         const {email, password} = req.body
         const userExist = await findByEmailService(email)
         if(userExist) {
-            return res.status(409).json({ error: 'El usuario ya existe.' });
+            throw CustomErrors.createError({
+                name: "Usuario existente",
+                cause: "Se intento registrar un usuario ya existente",
+                message: "Ya existe un usuario registrado con este correo electronico",
+                code: EErrors.CONFLICT_ERROR
+            })
+            
         }
 
         //

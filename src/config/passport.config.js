@@ -99,36 +99,3 @@ export {
 }
 
 
-/* const initializePassport = () => {
-
-
-    
-
-
-    
-    //LOGIN
-
-    passport.use('login', new LocalStrategy({
-        passReqToCallback: true,
-        usernameField: 'email'
-    }, async (req, username, password, done) =>{
-        try {
-            const user = await usersModel.findOne({ email: username });
-
-            if (!user || !isValidPassword(password, user.password) ) {
-                return done( null, false)
-            }
-
-            return done(null, user)
-        } catch (error) {
-            return done('Credenciales incorrectas')
-        }
-    }))
-  
-
-    // serializacion y deserializacion
-
-    
-
-} */
-
