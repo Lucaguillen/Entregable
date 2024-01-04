@@ -2,6 +2,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
+import { fakerES as faker } from "@faker-js/faker"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -27,11 +28,26 @@ const authotization = (role) =>{
     }
 }
 
+const generateProducts = ()=>{
+    return{
+        title: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        code: faker.number.int(),
+        price: faker.commerce.price({ min: 50, max: 2000 }),
+        stock: faker.number.int({ min: 0, max: 100 }),
+        category: faker.commerce.productMaterial(),
+        thumbnails: [],
+        status: faker.datatype.boolean(),
+        pid: faker.database.mongodbObjectId()
+    }
+}
+
 export {
     __dirname,
     createHash,
     isValidPassword,
     generateToken,
     PRIVATE_KEY,
-    authotization
+    authotization,
+    generateProducts
 }

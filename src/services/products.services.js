@@ -1,10 +1,17 @@
+import { generateProducts } from "../utils.js"
 import { ProductManager } from "../dao/factory.js"
 import ProductRepository from "../repositories/products.repositories.js"
 const productManager = new ProductManager()
 const productRepository = new ProductRepository(productManager)
 
 
-
+const getMockProducts = async ()=>{
+    let products = []
+    for (let i=0; i < 100; i++){
+        products.push(generateProducts())
+    }
+    return products
+}
 const deleteProductService = async (id)=>{
     const result = await productRepository.deleteProduct(id)
     return result
@@ -61,5 +68,6 @@ export{
     getProductsByIdService,
     updateProductService,
     addProductService,
-    getAllPaginateService
+    getAllPaginateService,
+    getMockProducts
 }

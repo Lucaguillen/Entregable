@@ -2,7 +2,7 @@ import Router from "./router.js"
 import { __dirname } from "../utils.js";
 
 import { accessRolesEnum, passportStrategiesEnum } from "../config/enumns.js";
-import {getAll, getByID, createProduct, updateProduct, deleteProduct} from "../controllers/products.controller.js"
+import {getAll, getByID, createProduct, updateProduct, deleteProduct, mockProducts} from "../controllers/products.controller.js"
 
 export default class ProductsRouter extends Router{
     constructor(){
@@ -10,6 +10,8 @@ export default class ProductsRouter extends Router{
     }
 
     init(){
+
+        this.get("/mockingproducts", [accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, mockProducts )
 
         this.get("/", [accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, getAll)
         this.get("/:id", [accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, getByID)

@@ -1,7 +1,25 @@
 import { EErrors } from "../config/enumns.js";
 import CustomErrors from "../middlewares/errors/CustomErrors.js";
-import { addProductService, deleteProductService, getAllPaginateService, getProductsByIdService, getProductsService, updateProductService } from "../services/products.services.js"
+import { addProductService, deleteProductService, getAllPaginateService, getProductsByIdService, getProductsService, updateProductService, getMockProducts } from "../services/products.services.js"
 
+const mockProducts = async  (req, res)=>{
+    try {
+        const result = await getMockProducts()
+        res.send({
+            status: "ok",
+            counter: result.length,
+            data: result
+        })
+        
+    } catch (error) {
+        throw CustomErrors.createError({
+            name: "Error en el Servidor",
+            cause: "Ocurrio un error en el servidor",
+            message: "Al intentar obtener todos los productos mockeados ocurrio un error interno en el servidor",
+            code: EErrors.INTERNAL_SERVER_ERROR
+        })
+    }
+}
 
 const deleteProduct = async  (req, res)=>{
     try {
@@ -173,5 +191,6 @@ export{
     getByID,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    mockProducts
 }
