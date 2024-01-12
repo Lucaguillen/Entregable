@@ -2,7 +2,7 @@ import express from "express";
 import ProductsRouter from "./Routes/products.routes.js"
 import CartRouter from "./Routes/carts.routes.js"
 import handlebars from "express-handlebars"
-import { __dirname } from "./utils.js";
+import { __dirname, addLogger } from "./utils.js";
 import ViewsRouter from "./Routes/views.routes.js"
 import { Server } from "socket.io";
 import UsersRouter from "./Routes/users.routes.js";
@@ -14,6 +14,8 @@ import config from "../config.js";
 import { CartManager, MessageManager, ProductManager } from "./dao/factory.js";
 import errorHandler from "./middlewares/errors/index.js"
 
+
+
 const productManager = new ProductManager();
 const messageManager = new MessageManager()
 const cartManager = new CartManager()
@@ -23,7 +25,10 @@ const usersRouter = new UsersRouter()
 const viewsRouter = new ViewsRouter()
 const productsRouter = new ProductsRouter()
 
+
 const app = express();
+
+app.use(addLogger)
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}));
@@ -46,6 +51,7 @@ app.use("/api/products", productsRouter.getRouter());
 app.use("/api/carts", cartRouter.getRouter());
 app.use('/api/sessions', usersRouter.getRouter());
 app.use("/",viewsRouter.getRouter())
+
 
 app.use(errorHandler);
 

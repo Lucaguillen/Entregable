@@ -3,6 +3,8 @@ import { dirname } from 'path';
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 import { fakerES as faker } from "@faker-js/faker"
+import config from '../config.js';
+import winston from 'winston';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -11,6 +13,76 @@ const __dirname = dirname(__filename);
 const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
 const isValidPassword = (plainPassword, hashedPassword) => bcrypt.compareSync(plainPassword, hashedPassword);
+
+// LOGS
+
+const ENVIROMENT = config.enviroment
+let logger;
+
+const customLevelOptions = {
+    levels: {
+        fatal: 0,
+        error: 1,
+        warning: 2,
+        info: 3,
+        http: 4,
+        debug: 5
+    },
+    colors: {
+        fatal: 'red',
+        error: 'yellow',
+        warning: 'yellow',
+        info: 'blue',
+        http: 'green',
+        debug: 'gray'
+    }
+};
+
+if (ENVIROMENT === "production"){
+    logger = winston.createLogger({
+        levels: customLevelOptions.levels,
+        transports: [
+            new winston.transports.Console({
+                level: 'info',
+                format: winston.format.combine(
+                    winston.format.colorize({
+                        all: true,
+                        colors: customLevelOptions.colors
+                    }),
+                    winston.format.simple()
+                )
+            }),
+            new winston.transports.File({
+                filename: 'src/logs/errors.log',
+                level: 'info'
+            })
+            
+        ]
+    })
+} else {
+    logger = winston.createLogger({
+        levels: customLevelOptions.levels,
+        transports: [
+            new winston.transports.Console({
+                level: 'debug',
+                format: winston.format.combine(
+                    winston.format.colorize({
+                        all: true,
+                        colors: customLevelOptions.colors
+                    }),
+                    winston.format.simple()
+                )
+            })
+        ]
+    })
+}
+
+
+const addLogger = (req, res, next) => {
+    req.logger = logger;
+    req.logger.info(`${req.method} en ${req.url} - ${new Date().toISOString()}`);
+    next();
+}
 
 //JWT
 
@@ -49,5 +121,6 @@ export {
     generateToken,
     PRIVATE_KEY,
     authotization,
-    generateProducts
+    generateProducts,
+    addLogger
 }

@@ -1,13 +1,16 @@
 import Router from "./router.js";
 import { __dirname} from "../utils.js";
 import { accessRolesEnum, passportStrategiesEnum } from "../config/enumns.js";
-import {getcart, getproducts} from "../controllers/views.controller.js"
+import {getcart, getproducts, loggers} from "../controllers/views.controller.js"
 
 export default class ViewsRouter extends Router{
     constructor(){
         super()
     }
     init() {
+
+        this.get('/loggerTests', [accessRolesEnum.USER, accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, loggers);
+
 
         this.get('/login',[accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING, async (req, res) => {
             res.render('login')
