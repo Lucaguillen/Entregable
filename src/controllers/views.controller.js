@@ -11,7 +11,8 @@ const loggers = async (req, res) => {
     
         res.send({ result: 'hola' });
     } catch (error) {
-        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
     }
 }
 
@@ -24,7 +25,8 @@ const getcart = async  (req, res)=>{
             user:req.user
         })
     } catch (error) {
-        console.error(error.message)
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
     }
 }
 
@@ -40,7 +42,8 @@ const getproducts = async  (req, res)=>{
             
         })
     } catch (error) {
-        console.error(error.message)
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
     }
 }
 

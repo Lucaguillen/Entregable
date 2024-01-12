@@ -5,13 +5,14 @@ const purchase = async (req, res) =>{
         const {cid} = req.params
         const cartbyid = await getCartsByID(cid)
         if(!cartbyid){
+            req.logger.error("no se encontro el carrito")
             return res.status(400).send({status: "error", message: "no se encontro el carrito"})
         }
         const purchase = await purchaseService(cid)
         res.send({status: "success", payload: purchase})
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
     }
 }
 
@@ -20,8 +21,8 @@ const createOne = async  (req,res) => {
         await createNewCart()
         res.send({status: "success", message: "Nuevo carrito creado"})
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
     }
 }
 
@@ -30,6 +31,7 @@ const cartbyid  = async (req, res) => {
     try {
         const cartbyid = await getCartsByID(cid)
         if(!cartbyid){
+            req.logger.error("no se encontro el carrito")
             return res.status(400).send({status: "error", message: "no se encontro el carrito"})
         } else{
             const cart = await getCartProducts(cid)
@@ -37,8 +39,8 @@ const cartbyid  = async (req, res) => {
         }
 
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
     } 
 }
 
@@ -49,6 +51,7 @@ const addProdToCart = async (req, res) => {
     try {
         const cartbyid = await getCartsByID(cid)
         if(!cartbyid){
+            req.logger.error("no se encontro el carrito")
             return res.status(400).send({status: "error", message: "no se encontro el carrito"})
         } 
         const existProductValue = await existProduct(pid,cid)
@@ -59,8 +62,8 @@ const addProdToCart = async (req, res) => {
         const addProduct = addProductCart(pid,cid)
         res.send({status: "success", message: `Nuevo producto agregado al carrito ${cid}`}) 
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
     } 
 }
 const removeQuantiyToProduct = async  (req,res) => {
@@ -70,13 +73,14 @@ const removeQuantiyToProduct = async  (req,res) => {
     try {
         const cartbyid = await getCartsByID(cid)
         if(!cartbyid){
+            req.logger.error("no se encontro el carrito")
             return res.status(400).send({status: "error", message: "no se encontro el carrito"})
         }
         const removeResult = await removeQuantiyService(cid, pid)
         return res.send({status: "success", message: " Cantidades del producto Actualizadas"})
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
     }
     
     
@@ -88,13 +92,14 @@ const deleteProdToCart = async (req,res) => {
     try {
         const cartbyid = await getCartsByID(cid)
         if(!cartbyid){
+            req.logger.error("no se encontro el carrito")
             return res.status(400).send({status: "error", message: "no se encontro el carrito"})
         }
         const removeResult = await removeProduct(cid, pid)
         return res.send({status: "success", message: " Producto eliminado"})
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
     }
      
 }
@@ -104,13 +109,14 @@ const emptyCart = async (req, res) => {
     try {
         const cartbyid = await getCartsByID(cid)
         if(!cartbyid){
+            req.logger.error("no se encontro el carrito")
             return res.status(400).send({status: "error", message: "no se encontro el carrito"})
         }
         const deleteProduct = await emptyCartService(cid)
         res.send({status: "success", message: `Carrito vaciado`}) 
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
     } 
 }
 
@@ -119,13 +125,14 @@ const updateCartArray = async (req, res) =>{
     try {
         const cartbyid = await getCartsByID(cid)
         if(!cartbyid){
+            req.logger.error("no se encontro el carrito")
             return res.status(400).send({status: "error", message: "no se encontro el carrito"})
         }
         const updateArray = await updateCartArrayService(cid)
         res.send({status: "success", message: `Productos del carrito actualizados`}) 
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ status: "error", error: "Ocurrió un error en el servidor" });
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
     }
 }
 

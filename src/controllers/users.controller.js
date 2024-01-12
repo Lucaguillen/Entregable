@@ -6,7 +6,7 @@ import { EErrors } from "../config/enumns.js"
 
 //GITHUB
         
-const github = async  (req, res)=>{
+/* const github = async  (req, res)=>{
     res.send({ status: 'success', message: 'usuario registrado'}) 
 }
  
@@ -17,10 +17,10 @@ const githubCallback = async (req,res)=>{
         res.cookie("coderCookieToken", accessToken, {maxAge: 24*60*60*1000, httpOnly: true })
         res.redirect('/products')
     } catch (error) {
-        console.error("falla en el inicio se session con GIT-HUB")
+        req.logger.fatal(error.message)
         res.redirect("/login")
     }
-}
+} */
 
 const current = async  (req, res) => {
     try {
@@ -29,7 +29,7 @@ const current = async  (req, res) => {
         const user = await nonSensitiveService(email)
         return res.sendSuccess(user)
     } catch (error) {
-        console.error('Error al realizar la operación de logout:', error);
+        req.logger.fatal(error.message)
         res.sendServerError(error.message)
     }
 }
@@ -39,7 +39,7 @@ const logout = async (req, res) => {
         res.clearCookie('coderCookieToken');
         res.redirect("/login");
     } catch (error) {
-        console.error('Error al realizar la operación de logout:', error);
+        req.logger.fatal(error.message)
         res.sendServerError(error.message)
     }
 }
@@ -63,6 +63,7 @@ const login = async  (req,res)=>{
         res.cookie("coderCookieToken", accessToken, {maxAge: 24*60*60*1000, httpOnly: true }).send({ status: "success", message: "login success"})
 
     } catch (error) { 
+        req.logger.fatal(error.message)
         res.sendClientError(error.message)
     }
 }
@@ -87,6 +88,7 @@ const register  = async  (req,res)=>{
         
         res.status(201).send({status: 'success', message: 'Usuario Registrado'}) 
     } catch (error) {
+        req.logger.fatal(error.message)
         res.sendClientError(error.message)
     }
 }

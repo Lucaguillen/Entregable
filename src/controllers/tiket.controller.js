@@ -5,7 +5,8 @@ const createTiket = async  (req, res)=>{
         const result = await newTiketService()
         return result
     } catch (error) {
-        console.error(error.message)
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
     }
 }
 
@@ -13,7 +14,8 @@ const getTiket = async  (req, res)=>{
     try {
         
     } catch (error) {
-        console.error(error.message)
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
     }
 }
 
@@ -21,7 +23,8 @@ const addToTiket = async  (req, res)=>{
     try {
         
     } catch (error) {
-        console.error(error.message)
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
     }
 }
 

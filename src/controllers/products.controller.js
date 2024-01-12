@@ -35,7 +35,6 @@ const deleteProduct = async  (req, res)=>{
         }
             
         const socketServer = req.app.get("socketio")
-        socketServer.emit('showproducts', await getProductsService());
         return res.send(`El Producto con el id ${id} fue exitosamente eliminado`)
     } catch (error) {
         throw CustomErrors.createError({
@@ -64,7 +63,6 @@ const updateProduct = async  (req, res)=>{
     try {
         const result = await updateProductService(productToUpdate,id)
         const socketServer = req.app.get("socketio")
-        socketServer.emit('showproducts', await getProductsService());
         return res.send(`El producto con el id ${id} fue exitosamente Actualizado`)
     } catch (error) {
         throw CustomErrors.createError({
@@ -118,7 +116,6 @@ const createProduct = async  (req, res) => {
     try {
         const addedProduct = await addProductService(req.body)
         const socketServer = req.app.get("socketio")
-        socketServer.emit('showproducts', await getProductsService());
         return res.send({status: "success", message: "producto creado"})
     } catch (error) {
         throw CustomErrors.createError({

@@ -1,5 +1,5 @@
 const socket = io();
-const addproductform = document.getElementById("addproductform");
+
 
 // chat
 let user
