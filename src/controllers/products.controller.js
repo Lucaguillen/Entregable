@@ -21,9 +21,65 @@ const mockProducts = async  (req, res)=>{
     }
 }
 
+/* const deleteProduct = async  (req, res)=>{
+    const {id} = req.params;
+    const product = await getProductsByIdService(id)
+    const userRole = req.user.role
+    const userEmail = req.user.email
+
+    switch (userRole) {
+        case "admin":
+            const result = await deleteProductService(id)
+            if(!result){
+                throw CustomErrors.createError({
+                    name: "Producto no encontrado",
+                    cause: "No se encuentra producto con esa ID",
+                    message: "el producto que se intenta eliminar no se encuentra en la base de datos",
+                    code: EErrors.PRODUCT_NOT_FOUND
+                })
+            }
+            return res.send(`El Producto con el id ${id} fue exitosamente eliminado`)
+        case "premium":
+            if (userEmail === product.owner){
+                const result = await deleteProductService(id)
+                if(!result){
+                    throw CustomErrors.createError({
+                        name: "Producto no encontrado",
+                        cause: "No se encuentra producto con esa ID",
+                        message: "el producto que se intenta eliminar no se encuentra en la base de datos",
+                        code: EErrors.PRODUCT_NOT_FOUND
+                    })
+                }
+                return res.send(`El Producto con el id ${id} fue exitosamente eliminado`)
+            }else{
+                throw CustomErrors.createError({
+                    name: "No puedes eliminar este producto",
+                    cause: "No eres el creador de este producto",
+                    message: "Error al intentar eliminar un producto del que el usuario no es el creador",
+                    code: EErrors.CONFLICT_ERROR
+                });
+            }
+    }
+
+    
+} */
+
 const deleteProduct = async  (req, res)=>{
+    const {id} = req.params;
+    const product = await getProductsByIdService(id)
+    const userRole = req.user.role
+    const userEmail = req.user.email
+
+    if ((userRole === "premium") && (userEmail != product.owner)){
+        throw CustomErrors.createError({
+            name: "No puedes eliminar este producto",
+            cause: "No eres el creador de este producto",
+            message: "Error al intentar eliminar un producto del que el usuario no es el creador",
+            code: EErrors.CONFLICT_ERROR
+        });
+    }
+
     try {
-        const {id} = req.params;
         const result = await deleteProductService(id)
         if(!result){
             throw CustomErrors.createError({
@@ -62,7 +118,6 @@ const updateProduct = async  (req, res)=>{
     }
     try {
         const result = await updateProductService(productToUpdate,id)
-        const socketServer = req.app.get("socketio")
         return res.send(`El producto con el id ${id} fue exitosamente Actualizado`)
     } catch (error) {
         throw CustomErrors.createError({
@@ -107,21 +162,17 @@ const createProduct = async  (req, res) => {
         })
     }
     
-    if (req.body.status !== "false") {
-        req.body.status = true;
-    }else{
-        req.body.status = false;
-    }
+    const userEmail = req.user.email
+    const productCreated = req.body
 
     try {
-        const addedProduct = await addProductService(req.body)
-        const socketServer = req.app.get("socketio")
+        const addedProduct = await addProductService(userEmail, productCreated)
         return res.send({status: "success", message: "producto creado"})
     } catch (error) {
         throw CustomErrors.createError({
             name: "Error en el Servidor",
             cause: "Ocurrio un error en el servidor",
-            message: "Al intentar crear un producto ocurrio un error interno en el servidor",
+            message: error.message,
             code: EErrors.INTERNAL_SERVER_ERROR
         })
     }
@@ -190,4 +241,5 @@ export{
     updateProduct,
     deleteProduct,
     mockProducts
+
 }

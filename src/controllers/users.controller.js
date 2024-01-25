@@ -1,5 +1,5 @@
 import {createHash, generateToken, isValidPassword} from "../utils.js"
-import { findByEmailService, registerService, nonSensitiveService } from "../services/user.services.js"
+import { findByEmailService, registerService, nonSensitiveService,updateRolService,  } from "../services/user.services.js"
 import CustomErrors from "../middlewares/errors/CustomErrors.js"
 import { EErrors } from "../config/enumns.js"
 
@@ -21,6 +21,17 @@ const githubCallback = async (req,res)=>{
         res.redirect("/login")
     }
 } */
+
+const updateRol = async (req, res) =>{
+    try {
+        const {uid} = req.params;
+        const result = await updateRolService(uid)
+        return res.sendSuccess(result)
+    } catch (error) {
+        req.logger.fatal(error.message)
+        res.sendServerError(error.message)
+    }
+}
 
 const current = async  (req, res) => {
     try {
@@ -94,10 +105,11 @@ const register  = async  (req,res)=>{
 }
 
 export {
-    github,
-    githubCallback,
+    /* github,
+    githubCallback, */
     current,
     logout,
     login,
-    register
+    register,
+    updateRol
 }

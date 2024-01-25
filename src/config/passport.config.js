@@ -1,16 +1,15 @@
-import passport, { Passport } from "passport";
-import jwt, { Strategy } from "passport-jwt";
-
+import passport from "passport";
+import jwt from "passport-jwt";
 import { PRIVATE_KEY } from "../utils.js";
-
-import local from "passport-local";
 import usersModel from "../dao/dbManagers/models/users.model.js";
-import { createHash } from "../utils.js";
 import GitHubStrategy from 'passport-github2';
+import config from "../../config.js";
+
+const ADMIN_EMAIL = config.adminEmail
 
 const JWTStrategy = jwt.Strategy
 const ExtractJWT = jwt.ExtractJwt
-const LocalStrategy = local.Strategy;
+
 
 const initializePassport = () =>{
 
@@ -49,7 +48,7 @@ const initializePassport = () =>{
                 password:''
             }
 
-            if(email === "adminCoder@coder.com"){
+            if(email === ADMIN_EMAIL){
                 newUser.role = "admin"
             }
 

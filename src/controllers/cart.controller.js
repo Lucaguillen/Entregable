@@ -1,5 +1,4 @@
-import {addProductCart, addQuantiyToProduct, createNewCart, existProduct, getCartProducts, getCartsByID, removeQuantiyService, removeProduct, emptyCartService, purchaseService, updateCartArrayService} from "../services/cart.services.js"
-
+import {addProductCart, addQuantiyToProduct, createNewCart, existProduct, getCartProducts, getCartsByID, removeQuantiyService, removeProduct, emptyCartService, purchaseService, updateCartArrayService,getProductsByIdService} from "../services/cart.services.js"
 const purchase = async (req, res) =>{
     try {
         const {cid} = req.params
@@ -48,6 +47,13 @@ const addProdToCart = async (req, res) => {
     const user = req.user
     const cid = user.cart.id._id;
     const {pid} = req.params
+    const product = await getProductsByIdService(pid)
+    
+
+    if((user.role === "premium") && (user.email === product.owner)){
+        return res.status(409).send({status: "error", message: "No puedes comprar un producto que tu mismo creaste"})
+    }
+
     try {
         const cartbyid = await getCartsByID(cid)
         if(!cartbyid){

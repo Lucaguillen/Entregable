@@ -31,8 +31,17 @@ const updateProductService = async (productToUpdate,id) =>{
     const result = await productRepository.updateProduct(productToUpdate, id )
     return result
 }
-const addProductService = async (product) =>{
-    const result = await productRepository.addProduct(product)
+const addProductService = async (userEmail, productCreated) =>{
+
+    if (productCreated.status !== "false") {
+        productCreated.status = true;
+    }else{
+        productCreated.status = false;
+    }
+
+    productCreated.owner = userEmail
+
+    const result = await productRepository.addProduct(productCreated)
     return result
 }
 

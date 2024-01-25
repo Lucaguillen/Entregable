@@ -84,13 +84,4 @@ socketServer.on('connection', async socket => {
         socket.emit("messageLogs",allMessages)
     })
 
-    //PRODUCTOS
-
-    socket.on("addToCartBtn", async pid =>{
-        const cart = await cartManager.getCartsByID("6544e501bef87d7997ccea14")
-        console.log(cart)
-       
-    })
-
-
 });

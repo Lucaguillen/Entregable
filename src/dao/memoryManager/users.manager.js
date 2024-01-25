@@ -19,6 +19,21 @@ export default class usersManager {
         .lean();
         return user
     }
+    findByID = async (id) =>{
+        const user = await usersModel.findOne({_id: id})
+        return user
+    }
+
+    updateRol = async (id, rol) => {
+        const result = await usersModel.updateOne(
+            { _id: id },
+            { $set: { role: rol } }
+        );
+        const updatedUser = await usersModel.findOne({ _id: id });
+        return updatedUser;
+    };
+    
+    
 
     setCartToUser = async (cid,uid) =>{
         try {

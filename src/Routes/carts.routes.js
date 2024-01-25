@@ -8,14 +8,14 @@ export default class CartRouter extends Router {
         super()
     }
     init(){
-        this.post("/", [accessRolesEnum.USER, accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, createOne)//
-        this.get("/:cid",[accessRolesEnum.USER, accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, cartbyid)//
-        this.post("/product/:pid", [accessRolesEnum.USER, accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, addProdToCart)//
-        this.post("/removeQuantity/:pid", [accessRolesEnum.USER, accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, removeQuantiyToProduct)//
-        this.delete("/remove/:pid",[accessRolesEnum.USER, accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, deleteProdToCart)//
-        this.delete("/empty/:cid",[accessRolesEnum.USER, accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, emptyCart)//
-        this.put("/:cid",[accessRolesEnum.USER, accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, )//
-        this.post("/:cid/purchase", [accessRolesEnum.USER, accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, purchase)//
+        this.post("/", [accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, createOne)//
+        this.get("/:cid",[accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, cartbyid)//
+        this.post("/product/:pid", [accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, addProdToCart)//
+        this.post("/removeQuantity/:pid", [accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, removeQuantiyToProduct)//
+        this.delete("/remove/:pid",[accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, deleteProdToCart)//
+        this.delete("/empty/:cid",[accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, emptyCart)//
+        this.put("/:cid",[accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, )//
+        this.post("/:cid/purchase", [accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, purchase)//
 
 
 

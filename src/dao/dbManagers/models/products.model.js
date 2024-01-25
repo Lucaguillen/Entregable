@@ -40,6 +40,10 @@ const productsSchema = new mongoose.Schema({
     },
     pid:{
         type: Number
+    },
+    owner:{
+        type: String,
+        default: "admin"
     }
 
 })

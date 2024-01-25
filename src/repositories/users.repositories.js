@@ -15,6 +15,16 @@ export default class UserRepository {
         return user
     }
 
+    findByID = async (id) =>{
+        const user = await this.UsersDao.findByID(id)
+        return user
+    }
+
+    updateRol = async (id, rol) =>{
+        const user = await this.UsersDao.updateRol(id, rol)
+        return user
+    }
+
     nonSensitiveUserInfo = async (email) =>{
         const user = await this.UsersDao.findByEmail(email)
         const userDTO = new UsersDTO(user)

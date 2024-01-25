@@ -9,7 +9,7 @@ export default class ViewsRouter extends Router{
     }
     init() {
 
-        this.get('/loggerTests', [accessRolesEnum.USER, accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, loggers);
+        this.get('/loggerTests', [accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, loggers);
 
 
         this.get('/login',[accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING, async (req, res) => {
@@ -20,15 +20,15 @@ export default class ViewsRouter extends Router{
             res.render('register')
         });
 
-        this.get("/products",[accessRolesEnum.USER,accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, getproducts)
+        this.get("/products",[accessRolesEnum.USER,accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, getproducts)
 
-        this.get("/chat", [accessRolesEnum.USER], passportStrategiesEnum.JWT, async (req, res)=>{
+        this.get("/chat", [accessRolesEnum.USER,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, async (req, res)=>{
             return res.render("chat")
         })
 
-        this.get("/cart", [accessRolesEnum.USER], passportStrategiesEnum.JWT, getcart)
+        this.get("/cart", [accessRolesEnum.USER,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, getcart)
 
-        this.get('/', [accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING, async (req, res) => {
+        this.get('/', [accessRolesEnum.PUBLIC,accessRolesEnum.PREMIUM], passportStrategiesEnum.NOTHING, async (req, res) => {
             return res.redirect('/login')
         });
         

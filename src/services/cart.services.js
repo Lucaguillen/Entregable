@@ -1,9 +1,13 @@
-import { CartManager } from "../dao/factory.js";
+import { CartManager, ProductManager } from "../dao/factory.js";
 const cartManager = new CartManager()
 import CartRepository from "../repositories/carts.repositories.js";
 const cartRepository = new CartRepository(cartManager)
 import { newTiketService } from "../services/tiket.services.js"
 import { updateProductService } from "./products.services.js";
+
+import ProductRepository from "../repositories/products.repositories.js"
+const productManager = new ProductManager()
+const productRepository = new ProductRepository(productManager)
 
 
 const purchaseService = async (cid) => {
@@ -80,7 +84,10 @@ const existProduct = async (pid,cid) =>{
     return existProduct
 }
 
-
+const getProductsByIdService = async (id) =>{
+    const result = await productRepository.getProductsById(id)
+    return result
+}
 
 const addQuantiyToProduct = async (cid, product) => {
     const addQuantiy = await cartRepository.addQuantiyToProduct(cid,product)
@@ -125,7 +132,8 @@ export{
     removeProduct,
     emptyCartService,
     purchaseService,
-    updateCartArrayService
+    updateCartArrayService,
+    getProductsByIdService
 }
 
 
