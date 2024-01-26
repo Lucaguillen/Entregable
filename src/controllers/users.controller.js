@@ -1,5 +1,5 @@
 import {createHash, generateToken, isValidPassword} from "../utils.js"
-import { findByEmailService, registerService, nonSensitiveService,updateRolService,  } from "../services/user.services.js"
+import { findByEmailService, registerService, nonSensitiveService,updateRolService,recoverPassService,recoverPassInfoService, setNewPassService  } from "../services/user.services.js"
 import CustomErrors from "../middlewares/errors/CustomErrors.js"
 import { EErrors } from "../config/enumns.js"
 
@@ -21,6 +21,49 @@ const githubCallback = async (req,res)=>{
         res.redirect("/login")
     }
 } */
+
+const changePass = async (req, res)=>{
+    const email = req.body.email
+    const newPass = req.body.newPass
+
+    const user = await findByEmailService(email)
+    if (isValidPassword(newPass, user.password) ) {
+        return res.status(409).send({status: "error", message: "La nueva contraseña no puede ser igual a la anterior"})
+    }
+
+    try {
+        const result = await setNewPassService(newPass, email)
+        /* if (result.success) {
+            return res.render('login');
+        } */
+        console.log("contraseña cambiada")
+
+    } catch (error) {
+        req.logger.fatal(error.message)
+        res.sendServerError(error.message)
+    }
+
+    
+}
+
+const recoverPass = async (req, res) =>{
+    const email = req.body.email
+    
+    const user = await recoverPassInfoService(email)
+    
+    if(!user){
+        return res.status(404).send({status: "error", message: "No se encuentra el usuario"})
+    }
+    try {
+        const result = await recoverPassService(user)
+        return result
+    } catch (error) {
+        req.logger.fatal(error.message)
+        res.sendServerError(error.message)
+    }
+}
+
+
 
 const updateRol = async (req, res) =>{
     try {
@@ -111,5 +154,7 @@ export {
     logout,
     login,
     register,
-    updateRol
+    updateRol,
+    recoverPass,
+    changePass
 }

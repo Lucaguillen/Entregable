@@ -1,4 +1,20 @@
 import { getCartproduct, getAllproducts } from "../services/views.services.js"
+import jwt, { decode } from "jsonwebtoken"
+import { PRIVATE_KEY } from "../utils.js"
+
+
+const passReset = async (req, res) =>{
+    const token = req.params.jwt
+    try {
+        jwt.verify(token, PRIVATE_KEY, (error, decode) => {
+            if (error) return res.render('recoverPass');
+            res.render('resetPass', {email:decode.user.email})
+        }) 
+    } catch (error) {
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
+    }
+}
 
 const loggers = async (req, res) => {
     try {
@@ -50,5 +66,6 @@ const getproducts = async  (req, res)=>{
 export{
     getcart,
     getproducts,
-    loggers
+    loggers,
+    passReset
 }

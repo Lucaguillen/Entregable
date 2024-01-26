@@ -93,6 +93,11 @@ const generateToken = (user) =>{
     return token
 }
 
+const generatePassToken = (user) =>{
+    const token = jwt.sign({user}, PRIVATE_KEY, {expiresIn: "1h"});
+    return token
+}
+
 const authotization = (role) =>{
     return async (req, res, next) =>{
         if(req.user.role !== role) return res.status(403).send({status: "error", message: "Sin permisos"})
@@ -122,5 +127,6 @@ export {
     PRIVATE_KEY,
     authotization,
     generateProducts,
-    addLogger
+    addLogger,
+    generatePassToken
 }

@@ -21,48 +21,7 @@ const mockProducts = async  (req, res)=>{
     }
 }
 
-/* const deleteProduct = async  (req, res)=>{
-    const {id} = req.params;
-    const product = await getProductsByIdService(id)
-    const userRole = req.user.role
-    const userEmail = req.user.email
 
-    switch (userRole) {
-        case "admin":
-            const result = await deleteProductService(id)
-            if(!result){
-                throw CustomErrors.createError({
-                    name: "Producto no encontrado",
-                    cause: "No se encuentra producto con esa ID",
-                    message: "el producto que se intenta eliminar no se encuentra en la base de datos",
-                    code: EErrors.PRODUCT_NOT_FOUND
-                })
-            }
-            return res.send(`El Producto con el id ${id} fue exitosamente eliminado`)
-        case "premium":
-            if (userEmail === product.owner){
-                const result = await deleteProductService(id)
-                if(!result){
-                    throw CustomErrors.createError({
-                        name: "Producto no encontrado",
-                        cause: "No se encuentra producto con esa ID",
-                        message: "el producto que se intenta eliminar no se encuentra en la base de datos",
-                        code: EErrors.PRODUCT_NOT_FOUND
-                    })
-                }
-                return res.send(`El Producto con el id ${id} fue exitosamente eliminado`)
-            }else{
-                throw CustomErrors.createError({
-                    name: "No puedes eliminar este producto",
-                    cause: "No eres el creador de este producto",
-                    message: "Error al intentar eliminar un producto del que el usuario no es el creador",
-                    code: EErrors.CONFLICT_ERROR
-                });
-            }
-    }
-
-    
-} */
 
 const deleteProduct = async  (req, res)=>{
     const {id} = req.params;

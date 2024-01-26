@@ -32,6 +32,15 @@ export default class usersManager {
         const updatedUser = await usersModel.findOne({ _id: id });
         return updatedUser;
     };
+
+    updatePass = async (newPass, emailSend) => {
+        const result = await usersModel.updateOne(
+            { email: emailSend },
+            { $set: { password: newPass } }
+        );
+        const updatedUser = await usersModel.findOne({ email: emailSend});
+        return updatedUser;
+    };
     
     
 

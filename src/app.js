@@ -10,9 +10,9 @@ import session from "express-session";
 import { initializePassport } from "./config/passport.config.js";
 import passport from "passport";
 import cookieParser from "cookie-parser";
-import config from "../config.js";
 import { CartManager, MessageManager, ProductManager } from "./dao/factory.js";
 import errorHandler from "./middlewares/errors/index.js"
+
 
 
 
@@ -27,6 +27,11 @@ const productsRouter = new ProductsRouter()
 
 
 const app = express();
+
+
+
+
+
 
 app.use(addLogger)
 
