@@ -11,13 +11,13 @@ export default class ProductsRouter extends Router{
 
     init(){
 
-        this.get("/mockingproducts", [accessRolesEnum.USER,accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, mockProducts )
+        this.get("/mockingproducts", [accessRolesEnum.USER,accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, mockProducts ) //
 
-        this.get("/", [accessRolesEnum.USER,accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, getAll)
-        this.get("/:id", [accessRolesEnum.USER,accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, getByID)
+        this.get("/", [accessRolesEnum.USER,accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, getAll)//
+        this.get("/:id", [accessRolesEnum.USER,accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, getByID)//
         this.post("/", [accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, createProduct)
-        this.put("/:id", [accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, updateProduct)
-        this.delete("/:id", [accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, deleteProduct)
+        this.put("/:id", [accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, updateProduct)//
+        this.delete("/:id", [accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, deleteProduct)//
 
     }
 

@@ -16,5 +16,9 @@ newpassForm.addEventListener('submit', async e => {
             newPass: newPassword
         })
     });
+
+    if (respuesta.ok) {
+        location.href = "/login";
+    }
     
 });

@@ -2,7 +2,7 @@ import express from "express";
 import ProductsRouter from "./Routes/products.routes.js"
 import CartRouter from "./Routes/carts.routes.js"
 import handlebars from "express-handlebars"
-import { __dirname, addLogger } from "./utils.js";
+import { __dirname, addLogger, __mainDirname } from "./utils.js";
 import ViewsRouter from "./Routes/views.routes.js"
 import { Server } from "socket.io";
 import UsersRouter from "./Routes/users.routes.js";
@@ -12,9 +12,8 @@ import passport from "passport";
 import cookieParser from "cookie-parser";
 import { CartManager, MessageManager, ProductManager } from "./dao/factory.js";
 import errorHandler from "./middlewares/errors/index.js"
-
-
-
+import swaggerJSDoc from "swagger-jsdoc";
+import SwaggerUIExpress from "swagger-ui-express";
 
 const productManager = new ProductManager();
 const messageManager = new MessageManager()
@@ -28,7 +27,18 @@ const productsRouter = new ProductsRouter()
 
 const app = express();
 
-
+const swaggerOptions = {
+    definition:{
+        openapi: '3.0.1',
+        info:{
+            title: 'Documentacion de ECommerce',
+            description: 'API Para los procesos de carrito y de productos del ECommerce'
+        }
+    },
+    apis: [`${__mainDirname}/docs/**/*.yaml`]
+}
+const specs = swaggerJSDoc(swaggerOptions)
+app.use('/api/docs',SwaggerUIExpress.serve, SwaggerUIExpress.setup(specs))
 
 
 

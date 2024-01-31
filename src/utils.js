@@ -5,9 +5,12 @@ import jwt from "jsonwebtoken";
 import { fakerES as faker } from "@faker-js/faker"
 import config from '../config.js';
 import winston from 'winston';
+import path from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+const __mainDirname = path.join(__dirname, '..');
 
 
 const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -128,5 +131,6 @@ export {
     authotization,
     generateProducts,
     addLogger,
-    generatePassToken
+    generatePassToken,
+    __mainDirname
 }

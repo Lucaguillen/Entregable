@@ -33,10 +33,7 @@ const changePass = async (req, res)=>{
 
     try {
         const result = await setNewPassService(newPass, email)
-        /* if (result.success) {
-            return res.render('login');
-        } */
-        console.log("contraseña cambiada")
+        return res.status(200).send({ status: "success", message: "contraseña cambiada" });
 
     } catch (error) {
         req.logger.fatal(error.message)

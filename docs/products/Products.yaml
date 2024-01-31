@@ -1,0 +1,216 @@
+paths:
+  /api/products/mockingproducts:
+    get:
+      summary: este servicio retorna un mock de productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: El mock de productos fue creado correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'
+        "500":
+          description: Ocurrio un error en el servidor
+  /api/products/:
+    get:
+      summary: este servicio retorna todos los productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: El servicio retorna todos los productos correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'
+        "500":
+          description: Ocurrio un error en el servidor
+    post:
+      summary: este servicio crea un producto
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: body
+          required: true
+          description: todos los tados del producto a crear
+          schema:
+            type: array
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
+      responses:
+        "200":
+          description: El servicio actualiza el producto correctamente
+        "400":
+          description: El precio y el stock deben ser números válidos y mayores que cero
+        "409":
+          description: ya existe un producto con ese codigo
+        "404":
+          description: el producto que se intenta actualizar no se encuentra en la base de datos
+        "500":
+          description: Ocurrio un error en el servidor
+  /api/products/{id}:
+    get:
+      summary: este servicio retorna un solo producto a partir de su ID (identificador del producto)
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: el id del producto buscado
+          schema:
+            type: String
+      responses:
+        "200":
+          description: El servicio retorna el producto correctamente
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#components/schemas/Product'
+        "404":
+          description: el producto que se intenta actualizar no se encuentra en la base de datos
+        "500":
+          description: Ocurrio un error en el servidor
+    delete:
+      summary: este servicio elimina un solo producto a partir de su ID (identificador del producto)
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: el id del producto a eliminar
+          schema:
+            type: String
+      responses:
+        "200":
+          description: El servicio elimino el producto correctamente
+        "404":
+          description: el producto que se intenta actualizar no se encuentra en la base de datos
+        "500":
+          description: Ocurrio un error en el servidor
+    put:
+      summary: este servicio actualiza un producto a partir de su ID (identificador del producto)
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: el id del producto a actualizar
+          schema:
+            type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
+      responses:
+        "200":
+          description: El servicio actualiza el producto correctamente
+        "404":
+          description: el producto que se intenta actualizar no se encuentra en la base de datos
+        "500":
+          description: Ocurrio un error en el servidor
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        owner:
+          type: String
+          description: indica el correo electronico del usuario creador de este producto
+        _id:
+          type: ObjectID
+          description: ID autogenerado por mongodb siendo el indentificador del usuario
+        title:
+          type: String
+          description: Titutlo del producto
+        description:
+          type: String
+          description: Descripcion del producto
+        code:
+          type: Number
+          description: Codigo numerico unico de cada producto
+        price:
+          type: Number
+          description: Precio de cada producto
+        stock:
+          type: Number
+          description: stock de cada producto
+        category:
+          type: String
+          description: Categoria a la que pertenece cada producto
+        thumbnails:
+          type: Array
+          description: Array que contiene links a las distintas fotos del producto
+        status:
+          type: Boolean
+          description: Booleano que indica si el producto esta disponible o no
+      example:
+        owner: "admin"
+        _id: "6544f23aa5708b61c9025f44"
+        title: "Producto 1"
+        description: "Descripción del Producto 1"
+        code: 124
+        price: 1200
+        stock: 957
+        category: "comida"
+        thumbnails: []
+        status: true
+  requestBodies:
+    updateProduct:
+      type: object
+      properties:
+        owner:
+          type: String
+          description: indica el correo electronico del usuario creador de este producto
+        title:
+          type: String
+          description: Titutlo del producto
+        description:
+          type: String
+          description: Descripcion del producto
+        code:
+          type: Number
+          description: Codigo numerico unico de cada producto
+        price:
+          type: Number
+          description: Precio de cada producto
+        stock:
+          type: Number
+          description: stock de cada producto
+        category:
+          type: String
+          description: Categoria a la que pertenece cada producto
+        thumbnails:
+          type: Array
+          description: Array que contiene links a las distintas fotos del producto
+        status:
+          type: Boolean
+          description: Booleano que indica si el producto esta disponible o no
+      example:
+        owner: "admin"
+        title: "Producto 1"
+        description: "Descripción del Producto 1"
+        code: 124
+        price: 1200
+        stock: 957
+        category: "comida"
+        thumbnails: []
+        status: true
+
+
