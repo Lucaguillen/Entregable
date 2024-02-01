@@ -1,0 +1,175 @@
+paths:
+  /api/carts:
+    post:
+      summary: Crear un nuevo carrito
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: El carrito fue creado exitosamente
+        "500":
+          description: Ocurrió un error en el servidor
+
+  /api/carts/{cid}:
+    get:
+      summary: Obtener productos en un carrito por ID
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Productos en el carrito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carts'
+        "400":
+          description: No se encontró el carrito
+        "500":
+          description: Ocurrió un error en el servidor
+  /api/carts/product/{pid}:
+    post:
+      summary: Agrega el producto al carrito, Si el producto ya esta en el carrito solo suma una unidad de la propiedad quantity 
+      tags:
+        - Carts
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto a agregar al carrito
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Producto agregado al carrito
+        "409":
+          description: No se puede comprar un producto creado por el usuario
+        "400":
+          description: No se encontró el carrito
+        "500":
+          description: Ocurrió un error en el servidor
+
+  /api/carts/removeQuantity/{pid}:
+    post:
+      summary: Remover una unidad de la propiedad quantity del producto en el carrito
+      tags:
+        - Carts
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto en el carrito
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Cantidad del producto actualizada
+        "400":
+          description: No se encontró el carrito o el producto
+        "500":
+          description: Ocurrió un error en el servidor
+
+  /api/carts/remove/{pid}:
+    delete:
+      summary: Remover un producto del carrito por ID del producto
+      tags:
+        - Carts
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto en el carrito
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Producto removido exitosamente
+        "400":
+          description: No se encontró el carrito o el producto
+        "500":
+          description: Ocurrió un error en el servidor
+
+  /api/carts/empty/{cid}:
+    delete:
+      summary: Vaciar un carrito por ID
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Carrito vaciado exitosamente
+        "400":
+          description: No se encontró el carrito
+        "500":
+          description: Ocurrió un error en el servidor
+
+  /api/carts/purchase/{cid}:
+    post:
+      summary: Realizar una compra
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Compra realizada exitosamente
+        "400":
+          description: No se encontró el carrito
+        "500":
+          description: Ocurrió un error en el servidor
+
+components:
+  schemas:
+    Carts:
+      type: object
+      properties:
+        productsCart:
+          type: array
+          items:
+            type: object
+            properties:
+              productID:
+                type: string
+                format: uuid
+                description: ID del producto enlazado al carrito
+              quantity:
+                type: number
+                description: Cantidad del producto en el carrito
+          description: Lista de productos en el carrito
+        userId:
+          type: string
+          format: uuid
+          description: ID del usuario asociado al carrito
+      required:
+        - productsCart
+        - userId
+      example:
+        productsCart:
+          - productID: "6544f23aa5708b61c9025f44"
+            quantity: 2
+          - productID: "6544f23aa5708b61c9025f45"
+            quantity: 1
+        userId: "6544f23aa5708b61c9025f46"
