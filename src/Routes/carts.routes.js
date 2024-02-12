@@ -9,7 +9,7 @@ export default class CartRouter extends Router {
     }
     init(){
         this.post("/", [accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, createOne)//
-        this.get("/:cid",[accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, cartbyid)//
+        this.get("/:cid",[accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING, cartbyid)//
         this.post("/product/:pid", [accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, addProdToCart)//
         this.post("/removeQuantity/:pid", [accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, removeQuantiyToProduct)//
         this.delete("/remove/:pid",[accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, deleteProdToCart)//
