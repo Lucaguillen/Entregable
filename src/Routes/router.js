@@ -1,6 +1,9 @@
 import { Router as expressRouter } from 'express';
 import passport from 'passport';
 import { accessRolesEnum, passportStrategiesEnum } from '../config/enumns.js';
+import multer from 'multer';
+
+
 
 export default class Router {
     constructor() {
@@ -12,7 +15,38 @@ export default class Router {
         return this.router;
     }
 
-    init() {}
+    init() {
+       this.storage = multer.diskStorage({
+            destination: (req, file, cb) => {
+                let destinationFolder = '';
+                switch (true) {
+                    case file.originalname.includes('products'):
+                        destinationFolder = './uploads/products/';
+                        break;
+                    case file.originalname.includes('identificacion') || file.originalname.includes('domicilio') || file.originalname.includes('banco'):
+                        destinationFolder = './uploads/documents/';
+                        break;
+                    default:
+                        destinationFolder = './uploads/profiles/';
+                }
+                cb(null, destinationFolder);
+            },
+            filename: (req, file, cb) => {
+                cb(null, `${Date.now()}-${file.originalname}`);
+            }
+        });
+    }
+
+    
+    
+    uploader = multer ({
+        storage: this.storage, 
+        onError: (err, next) => {
+            console.log(err.message)
+            next()
+        }
+    })
+    
 
 
     get(path, policies,strategy, ...callbacks) {
@@ -25,14 +59,15 @@ export default class Router {
         )
     }
 
-    post(path, policies,strategy, ...callbacks) {
+    post(path, policies, strategy, ...callbacks) {
         this.router.post(
             path,
             this.applyCustomPassportCall(strategy),
             this.handlePolicies(policies),
+            this.uploader.array('files', 3),
             this.generateCustomResponse,
             this.applyCallbacks(callbacks)
-        )
+        );
     }
 
     put(path, policies,strategy, ...callbacks) {
@@ -108,6 +143,7 @@ export default class Router {
       
         next();
     }
+    
 
     applyCallbacks(callbacks) {
         

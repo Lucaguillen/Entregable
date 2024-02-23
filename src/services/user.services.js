@@ -9,6 +9,11 @@ import nodemailer from "nodemailer"
 const userRepository = new UserRepository(usermanager)
 const cartRepository = new CartRepository(cartManager)
 
+
+const uploadedFilesService = async (uid) =>{
+
+}
+
 const transporter = nodemailer.createTransport({
     service: "gmail",
     port: 587,
@@ -23,6 +28,11 @@ const setNewPassService = async (newPass, emailSend) =>{
     return result
 }
 
+const LastConnectionService = async (id) => {
+    let lastConnectionDate = new Date();
+    await userRepository.lastconnection(id,lastConnectionDate)
+    
+}
 const recoverPassService = async (user) => {
 
     const accessToken = generatePassToken(user)
@@ -108,5 +118,7 @@ export{
     findByIDService,
     recoverPassService,
     recoverPassInfoService,
-    setNewPassService
+    setNewPassService,
+    LastConnectionService,
+    uploadedFilesService
 }

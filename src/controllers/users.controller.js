@@ -1,5 +1,5 @@
 import {createHash, generateToken, isValidPassword} from "../utils.js"
-import { findByEmailService, registerService, nonSensitiveService,updateRolService,recoverPassService,recoverPassInfoService, setNewPassService  } from "../services/user.services.js"
+import { findByEmailService, registerService, nonSensitiveService,updateRolService,recoverPassService,recoverPassInfoService, setNewPassService, LastConnectionService } from "../services/user.services.js"
 import CustomErrors from "../middlewares/errors/CustomErrors.js"
 import { EErrors } from "../config/enumns.js"
 
@@ -21,6 +21,17 @@ const githubCallback = async (req,res)=>{
         res.redirect("/login")
     }
 } */
+
+const uploadedFiles = async (req, res) =>{
+    try {
+        const {uid} = req.params;
+        const result = await uploadedFilesService(uid)
+        return res.sendSuccess(result)
+    } catch (error) {
+        req.logger.fatal(error.message)
+        res.sendServerError(error.message)
+    }
+}
 
 const changePass = async (req, res)=>{
     const email = req.body.email
@@ -111,6 +122,7 @@ const login = async  (req,res)=>{
         }
         delete user.password
         const accessToken = generateToken(user)
+        await LastConnectionService(user._id)
         res.cookie("coderCookieToken", accessToken, {maxAge: 24*60*60*1000, httpOnly: true }).send({ status: "success", message: "login success"})
 
     } catch (error) { 
@@ -153,5 +165,6 @@ export {
     register,
     updateRol,
     recoverPass,
-    changePass
+    changePass,
+    uploadedFiles
 }

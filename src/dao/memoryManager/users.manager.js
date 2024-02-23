@@ -11,6 +11,15 @@ export default class usersManager {
         return user
     }  
     
+    setLastConnection = async (id, lastConnectionDate) =>{
+        const result = await usersModel.updateOne(
+            { _id: id },
+            { $set: { last_connection: lastConnectionDate } }
+        );
+        const updatedUser = await usersModel.findOne({ _id: id });
+        return updatedUser;
+    }
+
     findByEmail = async (emailSend) =>{
         const user = await usersModel.findOne({email: emailSend}).populate({
             path: 'cart.id',

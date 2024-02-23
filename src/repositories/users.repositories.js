@@ -6,6 +6,10 @@ export default class UserRepository {
         this.UsersDao = UsersDao
     }
 
+    lastconnection = async (id,lastConnectionDate)=>{
+        const last = await this.UsersDao.setLastConnection(id, lastConnectionDate)
+        return last
+    }
     recoverPassInfo = async (email) =>{
         const user = await this.UsersDao.findByEmail(email)
         const recoverDTO = new RecoverDTO(user)

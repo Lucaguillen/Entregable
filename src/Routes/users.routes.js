@@ -1,6 +1,6 @@
 import Router from "./router.js"
 import { accessRolesEnum, passportStrategiesEnum } from "../config/enumns.js";
-import {/*  github, githubCallback, */ current, logout, login, register,updateRol, recoverPass,changePass  } from "../controllers/users.controller.js"
+import {/*  github, githubCallback, */ current, logout, login, register,updateRol, recoverPass,changePass, uploadedFiles } from "../controllers/users.controller.js"
 
 
 export default class UsersRouter extends Router{
@@ -10,6 +10,8 @@ export default class UsersRouter extends Router{
     init() {
 
         this.get("/current", [accessRolesEnum.USER,accessRolesEnum.ADMIN, accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT ,current)
+
+        this.post("/:uid/documents", [accessRolesEnum.USER, accessRolesEnum.ADMIN, accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, this.uploader.array('files', 3), uploadedFiles)
 
 
         this.post("/login", [accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING ,login)

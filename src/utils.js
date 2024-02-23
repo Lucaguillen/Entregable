@@ -6,6 +6,7 @@ import { fakerES as faker } from "@faker-js/faker"
 import config from '../config.js';
 import winston from 'winston';
 import path from 'path';
+import 'winston-daily-rotate-file'; 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -19,11 +20,22 @@ const isValidPassword = (plainPassword, hashedPassword) => bcrypt.compareSync(pl
 
 // LOGS
 
+const fileTransporter = new winston.transports.DailyRotateFile({
+    dirname: './src/logs',
+    filename: 'application-%DATE%.log',
+    datePattern: 'YYYY-MM-DD-HH-mm',
+    zippedArchive: true,
+    maxSize: '1m',
+    maxFiles: 3,
+    frequency: '1d',
+    level: 'debug'
+})
+
 const ENVIROMENT = config.enviroment
 let logger;
 
 const customLevelOptions = {
-    levels: {
+    levels: { 
         fatal: 0,
         error: 1,
         warning: 2,
@@ -58,7 +70,8 @@ if (ENVIROMENT === "production"){
             new winston.transports.File({
                 filename: 'src/logs/errors.log',
                 level: 'info'
-            })
+            }),
+            fileTransporter
             
         ]
     })
@@ -75,7 +88,8 @@ if (ENVIROMENT === "production"){
                     }),
                     winston.format.simple()
                 )
-            })
+            }),
+            fileTransporter
         ]
     })
 }
