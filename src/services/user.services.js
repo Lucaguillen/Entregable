@@ -11,7 +11,7 @@ const cartRepository = new CartRepository(cartManager)
 
 
 const uploadedFilesService = async (uid) =>{
-
+    console.log("hola")
 }
 
 const transporter = nodemailer.createTransport({

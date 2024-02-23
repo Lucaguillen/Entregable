@@ -8,15 +8,7 @@ import multer from 'multer';
 export default class Router {
     constructor() {
         this.router = expressRouter();
-        this.init();
-    }
-
-    getRouter() {
-        return this.router;
-    }
-
-    init() {
-       this.storage = multer.diskStorage({
+        this.storage = multer.diskStorage({
             destination: (req, file, cb) => {
                 let destinationFolder = '';
                 switch (true) {
@@ -35,19 +27,21 @@ export default class Router {
                 cb(null, `${Date.now()}-${file.originalname}`);
             }
         });
+        this.uploader = multer ({
+            storage: this.storage, 
+            onError: (err, next) => {
+                console.log(err.message)
+                next()
+            }
+        })
+        this.init();
     }
 
-    
-    
-    uploader = multer ({
-        storage: this.storage, 
-        onError: (err, next) => {
-            console.log(err.message)
-            next()
-        }
-    })
-    
+    getRouter() {
+        return this.router;
+    }
 
+    init() {  }
 
     get(path, policies,strategy, ...callbacks) {
         this.router.get(
@@ -67,6 +61,13 @@ export default class Router {
             this.uploader.array('files', 3),
             this.generateCustomResponse,
             this.applyCallbacks(callbacks)
+        );
+    }
+
+    upload(path) {
+        this.router.post(
+            path,
+            this.uploader.array('files', 3), 
         );
     }
 

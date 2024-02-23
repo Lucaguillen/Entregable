@@ -11,7 +11,7 @@ export default class UsersRouter extends Router{
 
         this.get("/current", [accessRolesEnum.USER,accessRolesEnum.ADMIN, accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT ,current)
 
-        this.post("/:uid/documents", [accessRolesEnum.USER, accessRolesEnum.ADMIN, accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, this.uploader.array('files', 3), uploadedFiles)
+        this.upload("/:uid/documents", this.uploader.array('files', 3), uploadedFiles)
 
 
         this.post("/login", [accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING ,login)
