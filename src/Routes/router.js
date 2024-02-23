@@ -13,13 +13,13 @@ export default class Router {
                 let destinationFolder = '';
                 switch (true) {
                     case file.originalname.includes('products'):
-                        destinationFolder = './uploads/products/';
+                        destinationFolder = `${__dirname}./uploads/products/`;
                         break;
                     case file.originalname.includes('identificacion') || file.originalname.includes('domicilio') || file.originalname.includes('banco'):
-                        destinationFolder = './uploads/documents/';
+                        destinationFolder = `${__dirname}./uploads/documents/`;
                         break;
                     default:
-                        destinationFolder = './uploads/profiles/';
+                        destinationFolder = `${__dirname}./uploads/profiles/`;
                 }
                 cb(null, destinationFolder);
             },
@@ -53,23 +53,28 @@ export default class Router {
         )
     }
 
-    post(path, policies, strategy, ...callbacks) {
-        this.router.post(
-            path,
-            this.applyCustomPassportCall(strategy),
-            this.handlePolicies(policies),
-            this.uploader.array('files', 3),
-            this.generateCustomResponse,
-            this.applyCallbacks(callbacks)
-        );
+    post(path, policies, strategy, applyMulter = false, ...callbacks) {
+        if (applyMulter){
+            this.router.post(
+                path,
+                this.applyCustomPassportCall(strategy),
+                this.handlePolicies(policies),
+                this.uploader.array('files', 3),
+                this.generateCustomResponse,
+                this.applyCallbacks(callbacks)
+            );
+        }else {
+            this.router.post(
+                path,
+                this.applyCustomPassportCall(strategy),
+                this.handlePolicies(policies),
+                this.generateCustomResponse,
+                this.applyCallbacks(callbacks)
+            );
+        }
+        
     }
 
-    upload(path) {
-        this.router.post(
-            path,
-            this.uploader.array('files', 3), 
-        );
-    }
 
     put(path, policies,strategy, ...callbacks) {
         this.router.put(

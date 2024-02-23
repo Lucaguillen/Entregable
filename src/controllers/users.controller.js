@@ -1,5 +1,5 @@
 import {createHash, generateToken, isValidPassword} from "../utils.js"
-import { findByEmailService, registerService, nonSensitiveService,updateRolService,recoverPassService,recoverPassInfoService, setNewPassService, LastConnectionService } from "../services/user.services.js"
+import { findByEmailService, registerService, nonSensitiveService,updateRolService,recoverPassService,recoverPassInfoService, setNewPassService, LastConnectionService,uploadedFilesService } from "../services/user.services.js"
 import CustomErrors from "../middlewares/errors/CustomErrors.js"
 import { EErrors } from "../config/enumns.js"
 

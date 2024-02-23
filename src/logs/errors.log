@@ -62,3 +62,5 @@
 {"level":"info","message":"POST en /api/sessions/65b190505843bb4578c6b385/documents - 2024-02-23T11:42:00.724Z"}
 {"level":"info","message":"POST en /api/sessions/65b190505843bb4578c6b385/documents - 2024-02-23T11:43:25.237Z"}
 {"level":"info","message":"POST en /api/sessions/65b190505843bb4578c6b385/documents - 2024-02-23T11:44:19.237Z"}
+{"level":"info","message":"POST en /api/sessions/65b190505843bb4578c6b385/documents - 2024-02-23T20:37:49.737Z"}
+{"level":"fatal","message":"uploadedFilesService is not defined"}
