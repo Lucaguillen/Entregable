@@ -10,9 +10,11 @@ const userRepository = new UserRepository(usermanager)
 const cartRepository = new CartRepository(cartManager)
 
 
-const uploadedFilesService = async (uid) =>{
-    console.log("hola")
+const uploadedFilesService = async (uid, file) =>{
+    const result = await userRepository.uploadedFiles(uid, file)
+    return result
 }
+
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -120,5 +122,6 @@ export{
     recoverPassInfoService,
     setNewPassService,
     LastConnectionService,
-    uploadedFilesService
+    uploadedFilesService,
+
 }

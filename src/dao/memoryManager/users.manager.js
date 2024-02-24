@@ -11,6 +11,16 @@ export default class usersManager {
         return user
     }  
     
+    setuploadedFiles = async (uid, file) =>{
+        const result = await usersModel.updateOne(
+            { _id: uid },
+            { $push: { documents: file } }
+        );
+        const updatedUser = await usersModel.findOne({ _id: uid });
+        return updatedUser;
+    }
+
+
     setLastConnection = async (id, lastConnectionDate) =>{
         const result = await usersModel.updateOne(
             { _id: id },

@@ -2,7 +2,7 @@ import { Router as expressRouter } from 'express';
 import passport from 'passport';
 import { accessRolesEnum, passportStrategiesEnum } from '../config/enumns.js';
 import multer from 'multer';
-
+import { __dirname } from '../utils.js';
 
 
 export default class Router {
@@ -13,13 +13,13 @@ export default class Router {
                 let destinationFolder = '';
                 switch (true) {
                     case file.originalname.includes('products'):
-                        destinationFolder = `${__dirname}./uploads/products/`;
+                        destinationFolder = `${__dirname}/public/uploads/products/`;
                         break;
                     case file.originalname.includes('identificacion') || file.originalname.includes('domicilio') || file.originalname.includes('banco'):
-                        destinationFolder = `${__dirname}./uploads/documents/`;
+                        destinationFolder = `${__dirname}/public/uploads/documents/`;
                         break;
                     default:
-                        destinationFolder = `${__dirname}./uploads/profiles/`;
+                        destinationFolder = `${__dirname}/public/uploads/profiles/`;
                 }
                 cb(null, destinationFolder);
             },
@@ -59,7 +59,7 @@ export default class Router {
                 path,
                 this.applyCustomPassportCall(strategy),
                 this.handlePolicies(policies),
-                this.uploader.array('files', 3),
+                this.uploader.single('thumbnail'),
                 this.generateCustomResponse,
                 this.applyCallbacks(callbacks)
             );

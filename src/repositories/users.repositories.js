@@ -6,6 +6,12 @@ export default class UserRepository {
         this.UsersDao = UsersDao
     }
 
+    uploadedFiles = async (uid, file)=>{
+        const result = await this.UsersDao.setuploadedFiles(uid, file)
+        return result
+    }
+
+
     lastconnection = async (id,lastConnectionDate)=>{
         const last = await this.UsersDao.setLastConnection(id, lastConnectionDate)
         return last

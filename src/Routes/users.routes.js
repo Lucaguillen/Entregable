@@ -12,13 +12,12 @@ export default class UsersRouter extends Router{
         this.get("/current", [accessRolesEnum.USER,accessRolesEnum.ADMIN, accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT ,current)
 
         this.post("/:uid/documents", [accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING, true, uploadedFiles)
-
-
-        this.post("/login", [accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING ,login)
-        this.post('/register',[accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING, register)
-        this.get('/logout',[accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING, logout)
         this.put("/premium/:uid",[accessRolesEnum.USER,accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM],passportStrategiesEnum.JWT, updateRol)
-        this.post("/recoverPass",[accessRolesEnum.PUBLIC],passportStrategiesEnum.NOTHING, recoverPass)
+
+        this.post("/login", [accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING, false ,login)
+        this.post('/register',[accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING, false, register)
+        this.get('/logout',[accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING, logout)
+        this.post("/recoverPass",[accessRolesEnum.PUBLIC],passportStrategiesEnum.NOTHING, false, recoverPass)
         this.put("/changePass",[accessRolesEnum.PUBLIC],passportStrategiesEnum.NOTHING, changePass)
 
         /* this.get('/github',[accessRolesEnum.PUBLIC], passportStrategiesEnum.GITHUB, github) */
