@@ -1,6 +1,6 @@
 import { __dirname } from "../../utils.js";
 import { cartsModel } from "../dbManagers/models/carts.model.js";
-import usersModel from "../dbManagers/models/users.model.js";
+import {usersModel} from "../dbManagers/models/users.model.js";
 
 export default class usersManager {
     constructor(path) {
@@ -11,6 +11,11 @@ export default class usersManager {
         return user
     }  
     
+    deleteUsers = async (uid) => {
+        const result = await usersModel.findByIdAndDelete({_id: uid})
+        return result
+    }
+
     setuploadedFiles = async (uid, file) =>{
         const result = await usersModel.updateOne(
             { _id: uid },
@@ -20,6 +25,21 @@ export default class usersManager {
         return updatedUser;
     }
 
+    allUsers = async () =>{
+        const allUsers = await usersModel.find();
+        return allUsers;
+    }
+
+    deleteManyUsers = async (userIds) =>{
+        const result = await usersModel.deleteMany({ _id: { $in: userIds } });
+        return result;
+    }
+
+    usersPaginate = async (page) =>{
+        const result = await usersModel.paginate({},{limit: 4, page, lean: true})
+        return result
+    }
+    
 
     setLastConnection = async (id, lastConnectionDate) =>{
         const result = await usersModel.updateOne(

@@ -1,6 +1,5 @@
 const passportStrategiesEnum = {
     JWT: 'jwt',
-    GITHUB: "github",
     NOTHING: 'na'
 };
 
@@ -19,7 +18,8 @@ const EErrors = {
     INTERNAL_SERVER_ERROR: 5,
     DATABASE_ERROR: 6,
     CREDENTIALS_ERROR: 7,
-    CONFLICT_ERROR: 8
+    CONFLICT_ERROR: 8,
+    UNPROCESSABLE_ENTITY_ERROR: 9
 }
 
 export {

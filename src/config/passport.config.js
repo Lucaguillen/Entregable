@@ -1,7 +1,7 @@
 import passport from "passport";
 import jwt from "passport-jwt";
 import { PRIVATE_KEY } from "../utils.js";
-import usersModel from "../dao/dbManagers/models/users.model.js";
+import { usersModel } from "../dao/dbManagers/models/users.model.js";
 import GitHubStrategy from 'passport-github2';
 import config from "../../config.js";
 
@@ -23,41 +23,6 @@ const initializePassport = () =>{
             return done(error)
         }
     }))
-
-    //GITHUB
-
-    passport.use('github', new GitHubStrategy({
-        clientID: 'Iv1.489c7bc8ee34faf2',
-        clientSecret: 'c01373334557f9a9803e83fff08446613eef98e0',
-        callbackURL: 'http://localhost:8080/api/sessions/github-callback',
-        scope: ['user:email']
-    }, async (accsessToken, refreshToken, profile, done) => {
-        try {
-            const email= profile.emails[0].value
-            const user = await usersModel.findOne({ email });
-            
-            if(user) {
-                return done(null, user);
-            }
-
-            const newUser = {
-                first_name: profile._json.name,
-                last_name:'',
-                age:'',
-                email,
-                password:''
-            }
-
-            if(email === ADMIN_EMAIL){
-                newUser.role = "admin"
-            }
-
-            const result = await usersModel.create(newUser);
-            return done(null, result);
-        } catch (error) {
-            return done(`Credenciales incorrectas`)
-        }
-    }));
 
     passport.serializeUser ((user, done) => {
         done(null, user._id)

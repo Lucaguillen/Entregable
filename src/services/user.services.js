@@ -16,6 +16,15 @@ const uploadedFilesService = async (uid, file) =>{
 }
 
 
+const deleteUserService = async (uid)=>{
+    const result = await userRepository.deleteUsers(uid)
+    return result
+}
+const allUsersService = async ()=>{
+    const result = await userRepository.allUsersMainDto()
+    return result
+}
+
 const transporter = nodemailer.createTransport({
     service: "gmail",
     port: 587,
@@ -24,6 +33,46 @@ const transporter = nodemailer.createTransport({
         pass: "qhfqfceltfodqjiq"
     }
 })
+
+const cleanUsersService = async ()=>{
+    const users = await userRepository.allUsers()
+
+    const hace30min = new Date();
+    hace30min.setMinutes(hace30min.getMinutes() - 1);
+
+    const inactiveUsers = users.filter(user => {
+        return !user.last_connection || user.last_connection < hace30min;
+    });
+
+    const inactiveUserIds = inactiveUsers.map(user => user._id);
+
+    for (const user of inactiveUsers) {
+        await transporter.sendMail({
+            from: 'CODER',
+            to: user.email,
+            subject: "Eliminación de cuenta por inactividad",
+            html: `
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Eliminación de cuenta por inactividad</title>
+                </head>
+                <body>
+                    <h1>¡Tu cuenta ha sido eliminada por inactividad!</h1>
+                    <p>Lamentablemente, hemos tenido que eliminar tu cuenta debido a la falta de actividad.</p>
+                    <p>Si crees que esto ha sido un error o deseas recuperar tu cuenta, por favor, contacta con nuestro equipo de soporte.</p>
+                </body>
+                </html>
+            `
+        });
+    }
+    
+    
+    const result = await userRepository.deleteInactives(inactiveUserIds)
+    return result
+}
 const setNewPassService = async (newPass, emailSend) =>{
     let passwordHashed = createHash(newPass)
     const result = await userRepository.updatePass(passwordHashed, emailSend)
@@ -123,5 +172,8 @@ export{
     setNewPassService,
     LastConnectionService,
     uploadedFilesService,
+    allUsersService,
+    cleanUsersService,
+    deleteUserService
 
 }

@@ -1,0 +1,26 @@
+<div>
+
+    <h1>Bienvenido {{user.first_name}}!</h1>
+    <p>rol: {{user.role}}</p>
+    <a href="/api/sessions/logout"><button>Cerrar sesion</button></a>
+
+
+    
+    {{#each allUsers}}
+        <p>Nombre: {{this.first_name}}</p>
+        <p>Email: {{this.email}}</p>
+        <p>Rol: {{this.role}}</p>
+        <button onclick="deleteUser('{{this._id}}')">Eliminar Usuario</button>
+        <button onclick="switchRol('{{this._id}}')">Cambiar Rol</button>
+    {{/each}}
+    {{#if hasPrevPage}}
+        <a href="/controlpanel?page={{prevPage}}"><button>Pagina Anterior</button></a>
+    {{/if}}
+    {{#if hasNextPage}}
+        <a href="/controlpanel?page={{nextPage}}"><button>Pagina Siguiente</button></a>
+    {{/if}}
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/controlpanel.js"></script>
+

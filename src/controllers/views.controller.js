@@ -1,4 +1,4 @@
-import { getCartproduct, getAllproducts } from "../services/views.services.js"
+import { getCartproduct, getAllproducts, getAllUsers } from "../services/views.services.js"
 import jwt, { decode } from "jsonwebtoken"
 import { PRIVATE_KEY } from "../utils.js"
 
@@ -63,9 +63,26 @@ const getproducts = async  (req, res)=>{
     }
 }
 
+const getUsers = async  (req, res)=>{
+    try {
+        const {page = 1} = req.query
+        const {docs, hasPrevPage, hasNextPage, nextPage, prevPage} = await getAllUsers(page)
+        res.render("admin",{
+            user: req.user,
+            allUsers: docs,hasPrevPage,hasNextPage,nextPage,prevPage
+ 
+        })
+    } catch (error) {
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
+    }
+}
+
+
 export{
     getcart,
     getproducts,
     loggers,
-    passReset
+    passReset,
+    getUsers
 }

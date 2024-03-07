@@ -66,6 +66,14 @@ export default (error, req, res, next) => {
             })
         break;
 
+        case EErrors.UNPROCESSABLE_ENTITY_ERROR:
+            res.status(422 ).send({
+                status: 'error',
+                error: error.name,
+                description: error.cause
+            })
+        break;
+
         default:
             res.status(500).send({
                 status: 'error',

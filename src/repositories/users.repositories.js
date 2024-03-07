@@ -1,4 +1,5 @@
 import UsersDTO from "../DTOs/users.dto.js";
+import UsersMainDataDTO from "../DTOs/usersMainData.dto.js";
 import RecoverDTO from "../DTOs/recover.dto.js";
 
 export default class UserRepository {
@@ -11,10 +12,34 @@ export default class UserRepository {
         return result
     }
 
+    deleteUsers = async (uid)=>{
+        const result = await this.UsersDao.deleteUsers(uid)
+        return result
+    }
+
+    usersPaginate = async (page) =>{
+        const result = await this.UsersDao.usersPaginate(page)
+        return result
+    }
 
     lastconnection = async (id,lastConnectionDate)=>{
         const last = await this.UsersDao.setLastConnection(id, lastConnectionDate)
         return last
+    }
+
+    allUsersMainDto = async () =>{
+        const user = await this.UsersDao.allUsers()
+        const recoverDTO = new UsersMainDataDTO(user)
+        return recoverDTO
+    }
+    allUsers = async () =>{
+        const user = await this.UsersDao.allUsers()
+        return user
+    }
+
+    deleteInactives = async (userIds) =>{
+        const result = await this.UsersDao.deleteManyUsers(userIds)
+        return result
     }
     recoverPassInfo = async (email) =>{
         const user = await this.UsersDao.findByEmail(email)

@@ -1,7 +1,7 @@
 import Router from "./router.js";
 import { __dirname} from "../utils.js";
 import { accessRolesEnum, passportStrategiesEnum } from "../config/enumns.js";
-import {getcart, getproducts, loggers, passReset} from "../controllers/views.controller.js"
+import {getcart, getproducts, loggers, passReset, getUsers} from "../controllers/views.controller.js"
 
 export default class ViewsRouter extends Router{
     constructor(){
@@ -11,13 +11,16 @@ export default class ViewsRouter extends Router{
 
         this.get('/loggerTests', [accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, loggers);
 
-        /////
+
         this.get("/passreset/:jwt",[accessRolesEnum.PUBLIC],passportStrategiesEnum.NOTHING, passReset)
-        ////
+
         
         this.get('/login',[accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING, async (req, res) => {
             res.render('login')
         });
+
+        this.get("/controlpanel",[accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, getUsers)
+
         
         this.get('/register',[accessRolesEnum.PUBLIC], passportStrategiesEnum.NOTHING, async (req, res) => {
             res.render('register')
