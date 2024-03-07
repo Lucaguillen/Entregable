@@ -68,16 +68,19 @@ const updateRol = async (req, res) =>{
     try {
         const {uid} = req.params;
         const user = await findByIDService(uid)
-        if (user.documents.includes('identificacion') && user.documents.includes('domicilio') && user.documents.includes('banco')){
-            const result = await updateRolService(uid)
-            return res.sendSuccess(result)
-        }else{
+        
+        const documentNames = user.documents.map(doc => doc.name);
+
+        if (documentNames.includes('identificacion') && documentNames.includes('domicilio') && documentNames.includes('banco')) {
+            const result = await updateRolService(uid);
+            return res.sendSuccess(result);
+        } else {
             throw CustomErrors.createError({
                 name: "Error de Solicitud",
                 cause: "Faltan cargar documentos para cambiar el rol",
                 message: "Error al intentar cambiar el rol del usuario",
                 code: EErrors.UNPROCESSABLE_ENTITY_ERROR
-            })
+            });
         }
 
     } catch (error) {
