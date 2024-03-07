@@ -563,3 +563,4 @@
 {"level":"info","message":"PUT en /api/sessions/premium/65e6241ba9776a23fab1b384 - 2024-03-07T22:19:24.669Z"}
 {"level":"fatal","message":"Error al intentar cambiar el rol del usuario"}
 {"level":"info","message":"POST en /api/sessions/65e6241ba9776a23fab1b384/documents - 2024-03-07T22:19:49.170Z"}
+{"level":"info","message":"POST en /api/sessions/65e6241ba9776a23fab1b384/documents - 2024-03-07T22:21:41.528Z"}
