@@ -10,9 +10,12 @@ export default class TiketRepository {
         return tiket
     }  
     findById = async (id) => {
-        const tiket = await this.TiketDao.create(id)
+        const tiket = await this.TiketDao.findTiketById(id)
         return tiket
     }
-    
+    findByEmail = async (email) => {
+        const tiket = await this.TiketDao.findTiketByEmail(email)
+        return tiket
+    }
    
 }

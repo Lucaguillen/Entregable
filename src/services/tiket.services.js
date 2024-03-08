@@ -30,6 +30,11 @@ const getTiketService = async (id) =>{
 }
 
 
+const findByEmailService = async (email) =>{
+    const result = await tiketRepository.findByEmail(email)
+    return result
+}
+
 
 const addToTiketService = async (cid) =>{
     
@@ -38,5 +43,6 @@ const addToTiketService = async (cid) =>{
 export{
     newTiketService,
     getTiketService,
-    addToTiketService
+    addToTiketService,
+    findByEmailService
 }

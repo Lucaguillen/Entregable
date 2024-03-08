@@ -2,6 +2,7 @@ import { EErrors } from "../config/enumns.js";
 import CustomErrors from "../middlewares/errors/CustomErrors.js";
 import { addProductService, deleteProductService, getAllPaginateService, getProductsByIdService, getProductsService, updateProductService, getMockProducts } from "../services/products.services.js"
 
+
 const mockProducts = async  (req, res)=>{
     try {
         const result = await getMockProducts()
@@ -37,9 +38,10 @@ const deleteProduct = async  (req, res)=>{
             code: EErrors.CONFLICT_ERROR
         });
     }
-
+    
     try {
-        const result = await deleteProductService(id)
+        
+        const result = await deleteProductService(id,product.owner)
         if(!result){
             throw CustomErrors.createError({
                 name: "Producto no encontrado",
@@ -89,7 +91,8 @@ const updateProduct = async  (req, res)=>{
 }
 
 const createProduct = async  (req, res) => {
-    
+    const userRole = req.user.role
+
     const {title, description, code, price, stock, category, thumbnails, status } = req.body
     
     if(!title || !description || !code || !price || !stock || ! category){
@@ -122,10 +125,18 @@ const createProduct = async  (req, res) => {
     }
     
     const userEmail = req.user.email
+
     const productCreated = req.body
 
+    if(userRole === "premium"){
+        productCreated.owner = userEmail
+    }else{
+        productCreated.owner = "admin"
+    }
+
+    
     try {
-        const addedProduct = await addProductService(userEmail, productCreated)
+        const addedProduct = await addProductService(productCreated)
         return res.send({status: "success", message: "producto creado"})
     } catch (error) {
         throw CustomErrors.createError({

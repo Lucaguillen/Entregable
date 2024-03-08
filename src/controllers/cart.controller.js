@@ -3,12 +3,13 @@ const purchase = async (req, res) =>{
     try {
         const {cid} = req.params
         const cartbyid = await getCartsByID(cid)
+        const userEmail = cartbyid.userId.email
         if(!cartbyid){
             req.logger.error("no se encontro el carrito")
             return res.status(400).send({status: "error", message: "no se encontro el carrito"})
         }
         const purchase = await purchaseService(cid)
-        res.send({status: "success", payload: purchase})
+        res.redirect(`/tiket/${userEmail}`)
     } catch (error) {
         req.logger.fatal(error.message)
         res.sendClientError(error.message)

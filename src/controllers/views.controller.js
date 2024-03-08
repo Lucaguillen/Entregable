@@ -1,7 +1,20 @@
 import { getCartproduct, getAllproducts, getAllUsers } from "../services/views.services.js"
+import { findByEmailService } from "../services/tiket.services.js"
 import jwt, { decode } from "jsonwebtoken"
 import { PRIVATE_KEY } from "../utils.js"
 
+
+const tiket = async (req, res)=>{
+    const {email} = req.params
+    const purchaseTiket = await findByEmailService(email)
+    const userTiket = purchaseTiket.toObject();
+    try {
+        res.render('tiket',{userTiket: userTiket})
+    } catch (error) {
+        req.logger.fatal(error.message)
+        res.sendClientError(error.message)
+    }
+}
 
 const passReset = async (req, res) =>{
     const token = req.params.jwt
@@ -9,7 +22,7 @@ const passReset = async (req, res) =>{
         jwt.verify(token, PRIVATE_KEY, (error, decode) => {
             if (error) return res.render('recoverPass');
             res.render('resetPass', {email:decode.user.email})
-        }) 
+        })  
     } catch (error) {
         req.logger.fatal(error.message)
         res.sendClientError(error.message)
@@ -84,5 +97,6 @@ export{
     getproducts,
     loggers,
     passReset,
-    getUsers
+    getUsers,
+    tiket
 }
