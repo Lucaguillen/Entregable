@@ -1,15 +1,22 @@
 import { getCartproduct, getAllproducts, getAllUsers } from "../services/views.services.js"
-import { findByEmailService } from "../services/tiket.services.js"
+import { findByEmailService as findTiketByEmailService  } from "../services/tiket.services.js"
 import jwt, { decode } from "jsonwebtoken"
 import { PRIVATE_KEY } from "../utils.js"
+import { findByEmailService } from "../services/user.services.js"
 
 
 const tiket = async (req, res)=>{
     const {email} = req.params
-    const purchaseTiket = await findByEmailService(email)
-    const userTiket = purchaseTiket.toObject();
     try {
-        res.render('tiket',{userTiket: userTiket})
+        const purchaseTiket = await findTiketByEmailService(email)
+        const userTiket = purchaseTiket.toObject();
+        const user = await findByEmailService( email)
+        res.render('tiket',{
+            user: user,
+            userTiket: userTiket
+        });
+        
+
     } catch (error) {
         req.logger.fatal(error.message)
         res.sendClientError(error.message)

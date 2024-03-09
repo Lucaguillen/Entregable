@@ -1,0 +1,7 @@
+{"level":"info","message":"GET en /products - 2024-03-09T18:18:19.547Z"}
+{"level":"info","message":"GET en /js/cart.js - 2024-03-09T18:18:19.789Z"}
+{"level":"info","message":"POST en /api/carts/product/65ea4b9b5645767d70a0cd35 - 2024-03-09T18:18:20.558Z"}
+{"level":"info","message":"GET en /cart - 2024-03-09T18:18:23.226Z"}
+{"level":"info","message":"GET en /js/cart.js - 2024-03-09T18:18:23.546Z"}
+{"level":"info","message":"POST en /api/carts/65e623d1a9776a23fab1b36c/purchase - 2024-03-09T18:18:24.997Z"}
+{"level":"info","message":"GET en /tiket/anahigmolina@gmail.com - 2024-03-09T18:18:26.294Z"}

@@ -10,15 +10,6 @@ const createTiket = async  (req, res)=>{
     }
 }
 
-const getTiket = async  (req, res)=>{
-    try {
-        
-    } catch (error) {
-        req.logger.fatal(error.message)
-        res.sendClientError(error.message)
-    }
-}
-
 const addToTiket = async  (req, res)=>{
     try {
         
@@ -30,6 +21,5 @@ const addToTiket = async  (req, res)=>{
 
 export{
     createTiket,
-    getTiket,
     addToTiket
 }

@@ -8,7 +8,7 @@ export default class ViewsRouter extends Router{
         super()
     }
     init() {
-        this.get('/tiket/:email', [accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, tiket);
+        this.get('/tiket/:email', [accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, tiket);  
 
         this.get('/loggerTests', [accessRolesEnum.USER, accessRolesEnum.ADMIN,accessRolesEnum.PREMIUM], passportStrategiesEnum.JWT, loggers);
 

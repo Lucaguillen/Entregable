@@ -8,8 +8,9 @@ const purchase = (_id) =>{
         method: 'POST',
     })
     .then(response => {
-        if (response.ok) {
 
+        if (response.ok) {
+            window.location.href = response.url
             console.log(`El carrito con ID ${cid} genero un tiket de compra.`);
         } else {
 
