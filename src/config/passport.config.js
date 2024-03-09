@@ -5,7 +5,7 @@ import { usersModel } from "../dao/dbManagers/models/users.model.js";
 import GitHubStrategy from 'passport-github2';
 import config from "../../config.js";
 
-const ADMIN_EMAIL = config.adminEmail
+
 
 const JWTStrategy = jwt.Strategy
 const ExtractJWT = jwt.ExtractJwt

@@ -31,7 +31,7 @@ const fileTransporter = new winston.transports.DailyRotateFile({
     level: 'debug'
 })
 
-const ENVIROMENT = config.enviroment
+const ENVIROMENT = process.env.ENVIROMENT
 let logger;
 
 const customLevelOptions = {

@@ -145,7 +145,7 @@ const registerService  = async  (user, email, password) =>{
     let passwordHashed = createHash(password)
     user.password = passwordHashed
     
-    if(email === config.adminEmail && password === config.adminPass){
+    if(email === config.process.env.ADMIN_EMAIL && password === config.process.env.ADMIN_PASSWORD){
         user.role = "admin"
     }else{
         user.role = "user"
