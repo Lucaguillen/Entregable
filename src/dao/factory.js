@@ -12,7 +12,7 @@ switch(persistence){
     case "MONGO":
         console.log("TRABAJANDO CON BDD")
         const mongoose = await import("mongoose")
-        await mongoose.connect(config.process.env.MONGO_URL)
+        await mongoose.connect(process.env.MONGO_URL)
         const { default: ProductManagerBDD } = await import("./memoryManager/products.manager.js")
         const { default: CartManagerBDD } = await import("./memoryManager/cart.manager.js")
         const { default: MessageManagerBDD } = await import("./memoryManager/message.manager.js")
