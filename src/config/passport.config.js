@@ -41,25 +41,13 @@ const cookieExtractor = req => {
     return token
 }
 
-const passportCall = (Strategy) => {
-    return async(req, res, next) =>{
-        passport.authenticate(Strategy, {session: false}, function(err, user, info ){
-            if (err) return next(err)
-            if(!user){
-                return res.status(401).send({status: "error", error: info.messages ? info.messages : info.toString()})
-            }
-            req.user = user
-            next()
-        })(req, res, next)
-    }
-}
+
 
 
 
 
 export {
-    initializePassport,
-    passportCall
+    initializePassport
 }
 
 
