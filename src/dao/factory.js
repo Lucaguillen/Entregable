@@ -36,7 +36,6 @@ switch(persistence){
         CartManager = CartManagerFS
         MessageManager = MessageManagerFS
         usersManager = usersManagerFS
-        // SOLO PASO A FILESYSTEM EL PRODUCT MANAGER POR FALTA DE TIEMPO, PERO LO IMPLEMENTO PARA QUE SE VEA QUE FUNCIONA!
         break;
 }
 

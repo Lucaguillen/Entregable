@@ -78,7 +78,9 @@ app.set("view engine","handlebars")
 
 app.use(express.static(`${__dirname}/public`))
 
-const server = app.listen(8080,()=>console.log("Listening on 8080"))
+const PORT = proces.env.PORT||8080
+
+const server = app.listen(PORT,()=>console.log(`Listening on ${PORT}`))
 
 const socketServer = new Server(server)
 app.set("socketio", socketServer)

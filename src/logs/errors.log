@@ -1544,3 +1544,24 @@
 {"level":"info","message":"GET en /api/sessions/logout - 2024-03-09T19:09:52.676Z"}
 {"level":"info","message":"GET en /login - 2024-03-09T19:09:52.680Z"}
 {"level":"info","message":"GET en /js/login.js - 2024-03-09T19:09:52.712Z"}
+{"level":"info","message":"GET en /login - 2024-03-13T19:29:26.792Z"}
+{"level":"info","message":"GET en /js/login.js - 2024-03-13T19:29:26.884Z"}
+{"level":"info","message":"GET en /favicon.ico - 2024-03-13T19:29:26.911Z"}
+{"level":"info","message":"POST en /api/sessions/login - 2024-03-13T19:29:31.931Z"}
+{"level":"info","message":"GET en /products - 2024-03-13T19:29:32.720Z"}
+{"level":"info","message":"GET en /js/cart.js - 2024-03-13T19:29:32.914Z"}
+{"level":"info","message":"GET en /api/sessions/logout - 2024-03-13T19:29:35.508Z"}
+{"level":"info","message":"GET en /login - 2024-03-13T19:29:35.514Z"}
+{"level":"info","message":"GET en /js/login.js - 2024-03-13T19:29:35.552Z"}
+{"level":"info","message":"GET en /register - 2024-03-13T19:29:36.802Z"}
+{"level":"info","message":"GET en /js/register.js - 2024-03-13T19:29:36.829Z"}
+{"level":"info","message":"POST en /api/sessions/register - 2024-03-13T19:29:42.096Z"}
+{"level":"fatal","message":"Cannot read properties of undefined (reading 'env')"}
+{"level":"info","message":"GET en /register - 2024-03-13T19:29:42.305Z"}
+{"level":"info","message":"GET en /js/register.js - 2024-03-13T19:29:42.330Z"}
+{"level":"info","message":"POST en /api/sessions/register - 2024-03-13T19:30:13.380Z"}
+{"level":"fatal","message":"Cannot read properties of undefined (reading 'env')"}
+{"level":"info","message":"GET en /register - 2024-03-13T19:30:13.587Z"}
+{"level":"info","message":"GET en /js/register.js - 2024-03-13T19:30:13.609Z"}
+{"level":"info","message":"POST en /api/sessions/register - 2024-03-13T19:30:42.501Z"}
+{"level":"fatal","message":"Cannot read properties of undefined (reading 'env')"}
