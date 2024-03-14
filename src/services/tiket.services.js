@@ -31,8 +31,17 @@ const getTiketService = async (id) =>{
 
 
 const findByEmailService = async (email) =>{
-    const result = await tiketRepository.findByEmail(email)
-    return result
+    const tikets = await tiketRepository.findByEmail(email)
+    let latestTiket = tikets[0]; 
+
+    for (let i = 1; i < tikets.length; i++) {
+        const currentTiket = tikets[i];
+        if (currentTiket.purchase_datatime > latestTiket.purchase_datatime) {
+            latestTiket = currentTiket; 
+        }
+    }
+
+    return latestTiket
 }
 
 

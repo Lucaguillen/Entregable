@@ -14,7 +14,8 @@ export default class TiketManager {
         return tiket
     }
     findTiketByEmail = async (UserEmail) => {
-        const tiket = await TiketsModel.findOne({purchaser: UserEmail})
-        return tiket
+        const tikets = await TiketsModel.find({ purchaser: UserEmail });
+        return tikets;
     }
+    
 } 
