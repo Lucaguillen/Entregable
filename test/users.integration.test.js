@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import supertest from "supertest";
 
-const requester = supertest('http://localhost:8080')
+const requester = supertest('https://entregable.up.railway.app')
 
 describe('Pruebas de integracios modulo de usuarios', ()=>{
     let cookie

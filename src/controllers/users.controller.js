@@ -49,7 +49,7 @@ const uploadedFiles = async (req, res) =>{
             return res.status(400).send({status: 'error', error: 'valores incompletos'});
         }
 
-        file.reference = `http://localhost:8080/uploads/documents/${filename}`;
+        file.reference = `https://entregable.up.railway.app/uploads/documents/${filename}`;
 
         const existingDocument = user.documents.find(doc => doc.name === file.name);
         if(existingDocument) {

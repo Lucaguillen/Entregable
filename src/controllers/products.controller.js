@@ -175,13 +175,13 @@ const getAll = async  (req, res) => {
         let prevLink = ""
         let nextLink = ""
         if (products.hasPrevPage) {
-            prevLink = `localhost:8080/api/products?page=${products.prevPage}`;
+            prevLink = `https://entregable.up.railway.app/api/products?page=${products.prevPage}`;
         }else{
             prevLink = null
         }
         
         if (products.hasNextPage) {
-            nextLink = `localhost:8080/api/products?page=${products.nextPage}`;
+            nextLink = `https://entregable.up.railway.appapi/products?page=${products.nextPage}`;
         }else{
             nextLink = null
         }

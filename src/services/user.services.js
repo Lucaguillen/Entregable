@@ -104,9 +104,9 @@ const recoverPassService = async (user) => {
             </head>
             <body>
                 <h1>Para establecer tu nueva contraseña, accede al siguiente enlace:</h1>
-                <p><a href="http://localhost:8080/passreset/${accessToken}" style="text-decoration: none; color: #007BFF;">Haz click aquí</a></p>
+                <p><a href="https://entregable.up.railway.app/passreset/${accessToken}" style="text-decoration: none; color: #007BFF;">Haz click aquí</a></p>
                 <p>Si el enlace anterior no funciona, puedes copiar y pegar el siguiente en tu navegador:</p>
-                <p>http://localhost:8080/passreset/${accessToken}</p>
+                <p>https://entregable.up.railway.app/passreset/${accessToken}</p>
             </body>
             </html>
         `

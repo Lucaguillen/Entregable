@@ -1,7 +1,7 @@
 <div>
     <h1>Carrito de {{user.first_name}}!</h1>
     <button onclick="emptyCart('{{user.cart.id._id}}')">Vaciar Carrito</button>
-    <button><a href="http://localhost:8080/products">Volver a Productos</a></button>
+    <button><a href="/products">Volver a Productos</a></button>
 
     {{#each cart.productsCart}} 
         <p>Titulo: {{this.productID.title}}</p> 
